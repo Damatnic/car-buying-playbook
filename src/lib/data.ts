@@ -642,6 +642,245 @@ export const WI_DEALERS = [
   { name: 'Kayser Automotive', url: 'https://www.kayserauto.com/', detail: 'Madison area' }
 ];
 
+export interface DealerStop {
+  name: string;
+  brand: string;
+  city: string;
+  url: string;
+  phone?: string;
+  mapsQuery: string;
+  vehicles: string[];
+  whyVisit: string;
+  noPressure?: boolean;
+}
+
+export const SHOPPING_DAY_DEALERS: DealerStop[] = [
+  {
+    name: 'CarMax',
+    brand: 'Multi-brand CPO',
+    city: 'Brookfield',
+    url: 'https://www.carmax.com/stores/7102',
+    phone: '+18889224875',
+    mapsQuery: 'CarMax Brookfield WI',
+    vehicles: ['RAV4', 'Forester', 'CR-V', 'CX-5', 'Tucson', 'Sportage', 'Rogue'],
+    whyVisit: 'Start here. Browse every brand at one stop, no haggling, no pressure, and your CarMax pre-approval works on the spot.',
+    noPressure: true
+  },
+  {
+    name: 'Wilde Toyota',
+    brand: 'Toyota — RAV4',
+    city: 'West Allis',
+    url: 'https://www.wildetoyota.com/',
+    phone: '+14148212733',
+    mapsQuery: 'Wilde Toyota West Allis WI',
+    vehicles: ['RAV4'],
+    whyVisit: 'Largest Toyota dealer in WI. Big CPO RAV4 inventory, decent pricing, busy enough that they negotiate.'
+  },
+  {
+    name: 'Andrew Toyota',
+    brand: 'Toyota — RAV4',
+    city: 'Glendale',
+    url: 'https://www.andrewtoyota.com/',
+    phone: '+14149643000',
+    mapsQuery: 'Andrew Toyota Glendale WI',
+    vehicles: ['RAV4'],
+    whyVisit: 'Solid backup Toyota dealer near Milwaukee. Good for cross-shopping Wilde to keep them honest on price.'
+  },
+  {
+    name: 'Schlossmann Subaru City',
+    brand: 'Subaru — Forester',
+    city: 'Milwaukee',
+    url: 'https://www.subarucityofmilwaukee.com/',
+    phone: '+14143536000',
+    mapsQuery: 'Schlossmann Subaru City of Milwaukee',
+    vehicles: ['Forester'],
+    whyVisit: 'Highest-volume Subaru dealer in metro Milwaukee. Standard AWD Foresters in and out of CPO inventory regularly.'
+  },
+  {
+    name: 'Russ Darrow Subaru',
+    brand: 'Subaru — Forester',
+    city: 'Milwaukee',
+    url: 'https://www.russdarrowsubaru.com/',
+    phone: '+14149611000',
+    mapsQuery: 'Russ Darrow Subaru Milwaukee WI',
+    vehicles: ['Forester'],
+    whyVisit: 'Russ Darrow group has aggressive pricing. Cross-shop against Schlossmann.'
+  },
+  {
+    name: 'Frank Boucher Hyundai',
+    brand: 'Hyundai — Tucson',
+    city: 'Waukesha',
+    url: 'https://www.boucherhyundai.com/',
+    phone: '+12625477700',
+    mapsQuery: 'Frank Boucher Hyundai Waukesha',
+    vehicles: ['Tucson'],
+    whyVisit: 'Closest Hyundai dealer to home. 10yr/100k warranty on new + Hyundai Capital subprime programs.'
+  },
+  {
+    name: 'Russ Darrow Kia of Wauwatosa',
+    brand: 'Kia — Sportage',
+    city: 'Wauwatosa',
+    url: 'https://www.russdarrowkiaofwauwatosa.com/',
+    phone: '+14144532900',
+    mapsQuery: 'Russ Darrow Kia Wauwatosa',
+    vehicles: ['Sportage'],
+    whyVisit: 'New 2023+ Sportage, 10yr/100k powertrain warranty, Kia Finance subprime-friendly.'
+  },
+  {
+    name: 'Heiser Honda Milwaukee',
+    brand: 'Honda — CR-V',
+    city: 'West Allis',
+    url: 'https://www.heiserhonda.com/',
+    phone: '+14143283600',
+    mapsQuery: 'Heiser Honda West Allis WI',
+    vehicles: ['CR-V'],
+    whyVisit: 'Big CR-V inventory. Honda holds value, so CPO is the smart play here over new.'
+  },
+  {
+    name: 'Russ Darrow Mazda',
+    brand: 'Mazda — CX-5',
+    city: 'Greenfield',
+    url: 'https://www.russdarrowmazda.com/',
+    phone: '+14144235300',
+    mapsQuery: 'Russ Darrow Mazda Greenfield WI',
+    vehicles: ['CX-5'],
+    whyVisit: 'Premium-feeling cabin for the money. CX-5 is underrated and often discounted vs CR-V/RAV4.'
+  },
+  {
+    name: 'Russ Darrow Nissan Milwaukee',
+    brand: 'Nissan — Rogue',
+    city: 'Milwaukee',
+    url: 'https://www.russdarrownissan.com/',
+    phone: '+14148732400',
+    mapsQuery: 'Russ Darrow Nissan Milwaukee',
+    vehicles: ['Rogue'],
+    whyVisit: 'NMAC (Nissan financing) is one of the most subprime-friendly captives. New Rogue often has factory promos.'
+  }
+];
+
+export const SHOPPING_DAY_PLAN = [
+  {
+    timeBlock: 'Morning · 9-11am',
+    title: '☕ Start at CarMax (low pressure)',
+    notes: [
+      'Walk the lot, sit in 3-5 different SUVs back-to-back',
+      'Notice cargo room, rear seat space, dashboard layout differences',
+      'Use your CarMax pre-approval to lock in a no-haggle price as a benchmark',
+      'No commitment yet — this is recon'
+    ]
+  },
+  {
+    timeBlock: 'Late morning · 11am-12pm',
+    title: '🥪 Lunch + decision',
+    notes: [
+      'Pick the 1-2 SUVs that felt right at CarMax',
+      'Look up CarGurus + Autotrader for those models within 100 miles',
+      'Pick 2 dealerships to visit this afternoon (one Toyota OR one Subaru, plus one alternate brand)',
+      'Eat. Drive there full, not hungry — hangry shopping = bad decisions'
+    ]
+  },
+  {
+    timeBlock: 'Afternoon · 1-3pm',
+    title: '🎯 First brand dealer visit',
+    notes: [
+      'Test drive 30+ minutes (highway + city + parking lot)',
+      'Get OTD price IN WRITING before talking financing',
+      'Mention you have pre-approval (Capital One / CU) — kills their F&I upsell',
+      'Decline ALL add-ons (GAP, paint, fabric, ext warranty, VIN etch)'
+    ]
+  },
+  {
+    timeBlock: 'Late afternoon · 3-5pm',
+    title: '🔁 Second dealer visit',
+    notes: [
+      'Same drill — OTD price in writing, test drive 30+ min',
+      'Now you have two real OTD prices to play against each other',
+      'If pressured to buy today, leave. The deal will still be there Monday.',
+      'Compare both quotes at home before signing anything'
+    ]
+  },
+  {
+    timeBlock: 'Evening · 6pm+',
+    title: '🛋️ Sleep on it (mandatory)',
+    notes: [
+      'Never sign on day 1 unless the deal is genuinely exceptional',
+      'Talk it through with your wife — both of you say yes or pass',
+      'Sleep beats every "today only" pitch a dealer will give you',
+      'Tomorrow morning: call/email the better dealer, accept, set delivery'
+    ]
+  }
+];
+
+export const QUICK_TIPS = {
+  say: {
+    label: 'SAY THIS',
+    color: 'success',
+    items: [
+      "What's the out-the-door price including ALL fees?",
+      'I have my own financing — what do you have for me?',
+      "I'm comparing prices with [other specific dealer]",
+      'Email me the breakdown before I come in',
+      'I need to think about it. I\'ll let you know tomorrow.'
+    ]
+  },
+  dontSay: {
+    label: 'NEVER SAY',
+    color: 'danger',
+    items: [
+      '"What payment can I afford monthly?" → They stretch the term to whatever fits',
+      '"I love this car" → You just lost negotiating leverage',
+      '"I need a car today" → They smell desperation, prices go up',
+      '"How much can I put down?" → Reveals your max budget',
+      '"What\'s the best you can do?" → Vague — ask for specific dollar amounts'
+    ]
+  },
+  askFor: {
+    label: 'ALWAYS ASK FOR',
+    color: 'accent',
+    items: [
+      'Carfax / AutoCheck vehicle history report (free at CarMax/most dealers)',
+      'Pre-purchase inspection at YOUR mechanic (CPO too — non-negotiable on used)',
+      'Itemized breakdown of every fee in writing',
+      'Window sticker (Monroney) for new cars',
+      '24 hours to review the contract before signing'
+    ]
+  },
+  walkIf: {
+    label: 'WALK AWAY IF',
+    color: 'warning',
+    items: [
+      "They won't put the OTD price in writing",
+      'They demand your SSN before giving any pricing',
+      '"Today only" pressure to sign within hours',
+      'They refuse a pre-purchase inspection',
+      'They want to roll your old loan into the new one ("rolling negative equity")',
+      'The price changes between desk and finance office'
+    ]
+  },
+  tricks: {
+    label: 'TRICKS THEY USE',
+    color: 'warning',
+    items: [
+      '"Four square" sheet — confusing math designed to hide costs',
+      'Payment packing — hides add-ons inside the monthly payment',
+      'Bait & switch — advertised car "just sold" but here\'s a pricier one',
+      'Spot delivery / yo-yo — take car home, "financing fell through" later',
+      'Doc fees — they say "non-negotiable" but they ARE negotiable',
+      'Mandatory dealer add-ons — fabric protection, VIN etch, nitrogen tires (decline all)'
+    ]
+  }
+};
+
+export const SHOPPING_DAY_BRING = [
+  "Driver's license",
+  'Proof of insurance card',
+  'Two recent pay stubs',
+  'Pre-approval letter (Capital One / credit union)',
+  'Current car title (if trading in — but consider selling private first)',
+  'Phone with this app open at /tips',
+  'Snacks, water — long stops at dealers'
+];
+
 export const TRAPS = [
   { title: '"Buy here pay here" lots', body: 'APR runs 20-29%. Cars are usually garbage. Predatory by design — avoid entirely.' },
   { title: 'Loans 84+ months', body: "Underwater for 4-5 years. Can't trade out. Pays thousands more in interest total." },
