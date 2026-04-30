@@ -1,0 +1,715 @@
+import type { Vehicle } from '@/types';
+
+export const VEHICLES: Vehicle[] = [
+  {
+    id: 'rav4',
+    name: 'Toyota RAV4',
+    trim: 'XLE / 2022-2023 CPO',
+    segment: 'CPO',
+    priceLow: 24000,
+    priceHigh: 28000,
+    cargoMax: 69.8,
+    cargoBehind: 37.6,
+    awd: 'available',
+    warranty: '12mo/12k CPO + remaining 5yr/60k powertrain',
+    topPick: true,
+    note: 'King of reliability. Holds value better than anything else here. Strong WI choice with optional AWD.',
+    images: {
+      exterior: 'https://upload.wikimedia.org/wikipedia/commons/0/0f/2019_Toyota_RAV4_LE_2.5L_front_4.14.19.jpg',
+      interior: 'https://upload.wikimedia.org/wikipedia/commons/3/3f/DSC06531-Toyota_Rav4_Hybrid.jpg'
+    },
+    manufacturerUrl: 'https://www.toyota.com/rav4/',
+    searchUrlSlug: { make: 'toyota', model: 'rav4' },
+    safety: {
+      suite: 'Toyota Safety Sense 2.5+',
+      standard: [
+        'Pre-Collision System with Pedestrian Detection',
+        'Lane Departure Alert with Steering Assist',
+        'Lane Tracing Assist',
+        'Full-Speed Dynamic Radar Cruise Control',
+        'Automatic High Beams',
+        'Road Sign Assist',
+        'Backup Camera',
+        '8 Airbags'
+      ],
+      available: [
+        'Blind Spot Monitor with Rear Cross Traffic Alert',
+        'Front and Rear Parking Assist with Auto Braking',
+        'Bird\'s Eye View Camera',
+        'Digital Rearview Mirror'
+      ]
+    },
+    tech: {
+      standard: [
+        '8" Touchscreen',
+        'Wireless Apple CarPlay',
+        'Wireless Android Auto',
+        'Bluetooth + USB',
+        '6-Speaker Audio',
+        'WiFi Hotspot capable'
+      ],
+      available: [
+        '10.5" Premium Audio Display',
+        'Wireless Phone Charging',
+        '11-Speaker JBL Premium Audio',
+        'Head-Up Display',
+        'Digital Key',
+        'Hands-Free Power Liftgate'
+      ]
+    },
+    comfort: {
+      standard: [
+        'Cloth Seats',
+        'Push-button Start',
+        'Auto Climate Control',
+        'Power Windows + Locks',
+        '60/40 Split Folding Rear Seats'
+      ],
+      available: [
+        'SofTex Synthetic Leather',
+        'Heated Front Seats',
+        'Heated Steering Wheel',
+        'Power Driver Seat',
+        'Panoramic Sunroof',
+        'Power Liftgate'
+      ]
+    },
+    specs: { mpg: '27 city / 35 hwy', horsepower: 203, seating: 5, towingLb: 1500, groundClearanceIn: 8.4 }
+  },
+  {
+    id: 'forester',
+    name: 'Subaru Forester',
+    trim: 'Premium / 2022-2023 CPO',
+    segment: 'CPO',
+    priceLow: 23000,
+    priceHigh: 27000,
+    cargoMax: 76.1,
+    cargoBehind: 31.1,
+    awd: 'standard',
+    warranty: '7yr/100k CPO from original date + 5yr/60k powertrain',
+    topPick: true,
+    note: 'Standard symmetrical AWD - best for WI winters. Easy visibility, simple to live with, huge cargo. Boxer engine = unique vibration profile.',
+    images: {
+      exterior: 'https://upload.wikimedia.org/wikipedia/commons/a/a9/2019_Subaru_Forester_2.5i_Touring_AWD_front_3.17.19.jpg',
+      interior: 'https://upload.wikimedia.org/wikipedia/commons/7/7e/Subaru_FORESTER_Premium_%285BA-SK9%29_interior.jpg',
+      rear: 'https://upload.wikimedia.org/wikipedia/commons/d/d3/2019_Subaru_Forester_2.5i_Premium%2C_rear_10.6.19.jpg'
+    },
+    manufacturerUrl: 'https://www.subaru.com/vehicles/forester/',
+    searchUrlSlug: { make: 'subaru', model: 'forester' },
+    safety: {
+      suite: 'Subaru EyeSight Driver Assist',
+      standard: [
+        'Pre-Collision Braking',
+        'Pre-Collision Throttle Management',
+        'Adaptive Cruise Control',
+        'Lane Departure & Sway Warning',
+        'Lane Keep Assist',
+        'Lead Vehicle Start Alert',
+        'Automatic Emergency Steering',
+        'Backup Camera',
+        '8 Airbags',
+        'Symmetrical AWD (standard)'
+      ],
+      available: [
+        'Blind Spot Detection with Rear Cross Traffic Alert',
+        'Reverse Automatic Braking',
+        'Steering Responsive Headlights',
+        'DriverFocus Distraction Mitigation'
+      ]
+    },
+    tech: {
+      standard: [
+        '6.5" or 8" Touchscreen',
+        'Apple CarPlay (wired)',
+        'Android Auto (wired)',
+        'Bluetooth + USB',
+        'STARLINK Connected Services'
+      ],
+      available: [
+        '8" Touchscreen with Dual USB',
+        'Wireless CarPlay/Android Auto (Sport+)',
+        'Harman Kardon 9-Speaker Premium Audio',
+        'Built-in Navigation'
+      ]
+    },
+    comfort: {
+      standard: [
+        'Cloth Seats',
+        'Auto Climate Control',
+        'Power Windows + Locks',
+        '60/40 Split Folding Rear Seats',
+        'Roof Rails',
+        '8.7" Ground Clearance'
+      ],
+      available: [
+        'Heated Front Seats',
+        'Heated Steering Wheel',
+        'Power Driver Seat',
+        'Panoramic Power Moonroof',
+        'Power Liftgate with Memory',
+        'Leather Seats (Touring)',
+        'Heated Rear Seats (Touring)'
+      ]
+    },
+    specs: { mpg: '26 city / 33 hwy', horsepower: 182, seating: 5, towingLb: 1500, groundClearanceIn: 8.7 }
+  },
+  {
+    id: 'crv',
+    name: 'Honda CR-V',
+    trim: 'EX / 2022-2023 CPO',
+    segment: 'CPO',
+    priceLow: 25000,
+    priceHigh: 28000,
+    cargoMax: 76.5,
+    cargoBehind: 39.3,
+    awd: 'available',
+    warranty: '12mo/12k CPO + remaining 5yr/60k powertrain',
+    note: 'Massive cargo, very roomy rear seat. Hybrid versions exist if MPG matters. Slightly pricier than rivals but holds value.',
+    images: {
+      exterior: 'https://upload.wikimedia.org/wikipedia/commons/1/1b/Honda_CR-V_e-HEV_Elegance_AWD_%28VI%29_%E2%80%93_f_14072024.jpg'
+    },
+    manufacturerUrl: 'https://automobiles.honda.com/cr-v',
+    searchUrlSlug: { make: 'honda', model: 'cr-v' },
+    safety: {
+      suite: 'Honda Sensing',
+      standard: [
+        'Collision Mitigation Braking System',
+        'Forward Collision Warning',
+        'Lane Keeping Assist System',
+        'Road Departure Mitigation',
+        'Adaptive Cruise Control with Low-Speed Follow',
+        'Traffic Sign Recognition',
+        'Auto High Beams',
+        'Driver Attention Monitor',
+        'Backup Camera with Dynamic Guidelines'
+      ],
+      available: [
+        'Blind Spot Information System',
+        'Rear Cross Traffic Monitor',
+        'Front and Rear Parking Sensors',
+        'Low-Speed Braking Control'
+      ]
+    },
+    tech: {
+      standard: [
+        '7" Touchscreen (LX) or 9" (EX+)',
+        'Apple CarPlay (wireless on EX+)',
+        'Android Auto (wireless on EX+)',
+        'Bluetooth + 2 USB ports',
+        'HondaLink Connected Services'
+      ],
+      available: [
+        '9" Touchscreen with Wireless CarPlay',
+        'Wireless Phone Charger',
+        'Bose 12-Speaker Premium Audio',
+        'Wi-Fi Hotspot',
+        'Head-Up Display (Hybrid trims)'
+      ]
+    },
+    comfort: {
+      standard: [
+        'Cloth Seats',
+        'Dual-Zone Climate Control',
+        'Push-Button Start',
+        'Multi-Angle Backup Camera',
+        '60/40 Split Folding Rear Seats'
+      ],
+      available: [
+        'Leather-Trimmed Seats',
+        'Heated Front Seats',
+        'Heated Steering Wheel',
+        '12-Way Power Driver Seat',
+        'Panoramic Moonroof',
+        'Hands-Free Power Tailgate',
+        'Heated Rear Seats'
+      ]
+    },
+    specs: { mpg: '28 city / 34 hwy', horsepower: 190, seating: 5, towingLb: 1500, groundClearanceIn: 8.2 }
+  },
+  {
+    id: 'cx5',
+    name: 'Mazda CX-5',
+    trim: 'Touring / 2022-2023 CPO',
+    segment: 'CPO',
+    priceLow: 22000,
+    priceHigh: 26000,
+    cargoMax: 59.3,
+    cargoBehind: 30.9,
+    awd: 'available',
+    warranty: '12mo/12k CPO + remaining 5yr/60k powertrain',
+    note: 'Premium-feeling interior, sportier drive. Smaller cargo than rivals but the cabin punches well above price.',
+    images: {
+      exterior: 'https://upload.wikimedia.org/wikipedia/commons/5/58/2020-2021_Mazda_CX-5_XD_AWD.jpg',
+      interior: 'https://upload.wikimedia.org/wikipedia/commons/a/aa/Mazda_CX-5_XD_L_Package_2WD_%28LDA-KF2P%29_interior.jpg',
+      rear: 'https://upload.wikimedia.org/wikipedia/commons/0/0a/2020-2021_Mazda_CX-5_XD_AWD_rear.jpg'
+    },
+    manufacturerUrl: 'https://www.mazdausa.com/vehicles/cx-5',
+    searchUrlSlug: { make: 'mazda', model: 'cx-5' },
+    safety: {
+      suite: 'Mazda i-Activsense',
+      standard: [
+        'Smart Brake Support (Forward AEB)',
+        'Mazda Radar Cruise Control',
+        'Lane Departure Warning System',
+        'Lane Keep Assist',
+        'Blind Spot Monitoring',
+        'Rear Cross Traffic Alert',
+        'Driver Attention Alert',
+        'Auto High-Beam Control',
+        'Backup Camera'
+      ],
+      available: [
+        'Smart Brake Support Reverse',
+        'Front Cross Traffic Alert',
+        'Adaptive Front-Lighting System',
+        '360° View Monitor',
+        'Traffic Jam Assist'
+      ]
+    },
+    tech: {
+      standard: [
+        '10.25" Mazda Connect Display',
+        'Apple CarPlay (wired or wireless)',
+        'Android Auto (wired)',
+        'Bluetooth',
+        '6-Speaker Audio'
+      ],
+      available: [
+        '10-Speaker Bose Premium Audio',
+        'Wireless Phone Charging',
+        'Active Driving Display (HUD)',
+        'Built-in Navigation'
+      ]
+    },
+    comfort: {
+      standard: [
+        'Cloth Seats',
+        'Dual-Zone Auto Climate',
+        'Push-Button Start',
+        '40/20/40 Split Folding Rear Seats'
+      ],
+      available: [
+        'Leatherette or Leather Seats',
+        'Heated Front Seats',
+        'Heated Steering Wheel',
+        'Heated Rear Seats',
+        'Ventilated Front Seats',
+        '10-Way Power Driver Seat',
+        'Power Moonroof',
+        'Power Liftgate'
+      ]
+    },
+    specs: { mpg: '24 city / 30 hwy', horsepower: 187, seating: 5, towingLb: 2000, groundClearanceIn: 7.6 }
+  },
+  {
+    id: 'sportage',
+    name: 'Kia Sportage',
+    trim: 'LX (NEW) / EX (CPO 2023)',
+    segment: 'NEW',
+    priceLow: 27000,
+    priceHigh: 28000,
+    cargoMax: 73.7,
+    cargoBehind: 39.6,
+    awd: 'available',
+    warranty: '10yr/100k powertrain (new), 5yr/60k bumper-to-bumper',
+    topPick: true,
+    note: '2023 redesign was a huge upgrade. 10-year warranty is killer for subprime peace of mind. Modern tech, lots of room.',
+    images: {
+      exterior: 'https://upload.wikimedia.org/wikipedia/commons/8/8d/2022_Kia_Sportage_GT-Line_ISG_HEV_Automatic_1.6_Front.jpg',
+      interior: 'https://upload.wikimedia.org/wikipedia/commons/e/ea/Kia_Sportage_Plug-in-Hybrid_%28NQ5%29_IAA_2021_1X7A0114.jpg',
+      rear: 'https://upload.wikimedia.org/wikipedia/commons/9/9c/2022_Kia_Sportage_GT-Line_ISG_HEV_Automatic_1.6_Rear.jpg'
+    },
+    manufacturerUrl: 'https://www.kia.com/us/en/sportage',
+    searchUrlSlug: { make: 'kia', model: 'sportage' },
+    safety: {
+      suite: 'Kia Drive Wise',
+      standard: [
+        'Forward Collision-Avoidance Assist (Car/Pedestrian/Cyclist)',
+        'Blind-Spot Collision-Avoidance Assist',
+        'Lane Keeping Assist',
+        'Lane Following Assist',
+        'Smart Cruise Control with Stop & Go',
+        'Driver Attention Warning',
+        'High Beam Assist',
+        'Rear Cross-Traffic Collision Avoidance',
+        'Safe Exit Warning'
+      ],
+      available: [
+        'Highway Driving Assist 2',
+        'Blind-Spot View Monitor',
+        'Surround View Monitor (360)',
+        'Remote Smart Parking Assist',
+        'Forward/Reverse Parking Distance Warning'
+      ]
+    },
+    tech: {
+      standard: [
+        '8" Touchscreen',
+        'Apple CarPlay (wireless)',
+        'Android Auto (wireless)',
+        'Bluetooth + USB-C ports',
+        '6-Speaker Audio'
+      ],
+      available: [
+        '12.3" Curved Display (instrument + infotainment)',
+        'Wireless Phone Charger',
+        'Harman Kardon 8-Speaker Premium Audio',
+        'Head-Up Display',
+        'Digital Key 2 (smartphone as key)',
+        'Built-in Navigation'
+      ]
+    },
+    comfort: {
+      standard: [
+        'Cloth Seats',
+        'Auto Climate Control',
+        'Push-Button Start',
+        'Heated Front Seats (most trims)',
+        '60/40 Split Folding Rear Seats'
+      ],
+      available: [
+        'SynTex or Leather Seats',
+        'Heated Steering Wheel',
+        'Heated Rear Seats',
+        'Ventilated Front Seats',
+        '10-Way Power Driver Seat',
+        'Panoramic Sunroof',
+        'Power Liftgate with Smart Open'
+      ]
+    },
+    specs: { mpg: '25 city / 32 hwy', horsepower: 187, seating: 5, towingLb: 2500, groundClearanceIn: 8.3 }
+  },
+  {
+    id: 'tucson',
+    name: 'Hyundai Tucson',
+    trim: 'SE (NEW) / SEL (CPO 2023)',
+    segment: 'NEW',
+    priceLow: 28000,
+    priceHigh: 29000,
+    cargoMax: 74.8,
+    cargoBehind: 38.7,
+    awd: 'available',
+    warranty: '10yr/100k powertrain (new), 5yr/60k bumper-to-bumper',
+    note: 'Same chassis as Sportage. Sharper exterior design. CPO carries remaining 10yr warranty.',
+    images: {
+      exterior: 'https://upload.wikimedia.org/wikipedia/commons/8/86/Hyundai_Tucscon_1.6_T-GDI_Hybrid_Prime_%28IV%29_%E2%80%93_f_25042024.jpg',
+      interior: 'https://upload.wikimedia.org/wikipedia/commons/b/be/Hyundai_Tucson_Inspiration_NX4_Gray_Interior_%284%29.jpg',
+      rear: 'https://upload.wikimedia.org/wikipedia/commons/c/c4/2024_Hyundai_Tucson_Limited%2C_rear_12.10.24.jpg'
+    },
+    manufacturerUrl: 'https://www.hyundaiusa.com/us/en/vehicles/tucson',
+    searchUrlSlug: { make: 'hyundai', model: 'tucson' },
+    safety: {
+      suite: 'Hyundai SmartSense',
+      standard: [
+        'Forward Collision-Avoidance Assist (Car/Pedestrian/Cyclist)',
+        'Blind-Spot Collision-Avoidance Assist',
+        'Lane Keeping Assist',
+        'Lane Following Assist',
+        'Smart Cruise Control with Stop & Go',
+        'Driver Attention Warning',
+        'High Beam Assist',
+        'Rear Cross-Traffic Collision Avoidance',
+        'Safe Exit Warning'
+      ],
+      available: [
+        'Highway Driving Assist',
+        'Blind-Spot View Monitor',
+        'Surround View Monitor (360)',
+        'Remote Smart Parking Assist'
+      ]
+    },
+    tech: {
+      standard: [
+        '8" Touchscreen',
+        'Apple CarPlay (wireless)',
+        'Android Auto (wireless)',
+        'Bluetooth + USB-C ports',
+        '6-Speaker Audio'
+      ],
+      available: [
+        '10.25" Touchscreen + 10.25" Digital Cluster',
+        'Wireless Phone Charger',
+        'Bose 8-Speaker Premium Audio',
+        'Built-in Navigation',
+        'Digital Key 2'
+      ]
+    },
+    comfort: {
+      standard: [
+        'Cloth Seats',
+        'Auto Climate Control',
+        'Push-Button Start',
+        '60/40 Split Folding Rear Seats'
+      ],
+      available: [
+        'Leather Seats',
+        'Heated Front Seats',
+        'Heated Steering Wheel',
+        'Heated Rear Seats',
+        'Ventilated Front Seats',
+        '8-Way Power Driver Seat',
+        'Panoramic Sunroof',
+        'Hands-Free Smart Liftgate'
+      ]
+    },
+    specs: { mpg: '25 city / 32 hwy', horsepower: 187, seating: 5, towingLb: 2000, groundClearanceIn: 8.3 }
+  },
+  {
+    id: 'rogue',
+    name: 'Nissan Rogue',
+    trim: 'S (NEW) / SV (CPO 2022-2023)',
+    segment: 'NEW',
+    priceLow: 28000,
+    priceHigh: 30000,
+    cargoMax: 74.1,
+    cargoBehind: 36.5,
+    awd: 'available',
+    warranty: '5yr/60k powertrain, 3yr/36k bumper-to-bumper',
+    note: 'Comfortable ride, good MPG. Nissan Motor Acceptance is one of the most subprime-friendly captives in the industry.',
+    images: {
+      exterior: 'https://upload.wikimedia.org/wikipedia/commons/9/94/2021_Nissan_Rogue_SV_AWD%2C_front_1.1.21.jpg',
+      interior: 'https://upload.wikimedia.org/wikipedia/commons/5/5e/2022_Nissan_Rogue_interior.jpg',
+      rear: 'https://upload.wikimedia.org/wikipedia/commons/b/b4/2023_Nissan_Rogue_SV%2C_rear_3.24.23.jpg'
+    },
+    manufacturerUrl: 'https://www.nissanusa.com/vehicles/crossovers-suvs/rogue.html',
+    searchUrlSlug: { make: 'nissan', model: 'rogue' },
+    safety: {
+      suite: 'Nissan Safety Shield 360',
+      standard: [
+        'Automatic Emergency Braking with Pedestrian Detection',
+        'Rear Automatic Braking',
+        'Blind Spot Warning',
+        'Rear Cross Traffic Alert',
+        'Lane Departure Warning',
+        'High Beam Assist',
+        'Intelligent Cruise Control',
+        'Intelligent Forward Collision Warning',
+        'Rear Door Alert'
+      ],
+      available: [
+        'ProPILOT Assist with Navi-Link',
+        'Intelligent Around View Monitor (360)',
+        'Traffic Sign Recognition',
+        'Front and Rear Sonar with Auto Brake'
+      ]
+    },
+    tech: {
+      standard: [
+        '8" Touchscreen',
+        'Apple CarPlay (wireless)',
+        'Android Auto (wired)',
+        'Bluetooth + USB',
+        'NissanConnect Services'
+      ],
+      available: [
+        '12.3" Touchscreen',
+        'Wireless Phone Charging',
+        'Bose 10-Speaker Premium Audio',
+        'Head-Up Display',
+        'Built-in Navigation',
+        'Wi-Fi Hotspot'
+      ]
+    },
+    comfort: {
+      standard: [
+        'Cloth Seats',
+        'Auto Climate Control',
+        'Push-Button Start',
+        'Rear Door Alert',
+        '60/40 Split Folding Rear Seats',
+        'Divide-N-Hide Cargo System'
+      ],
+      available: [
+        'Quilted Semi-Aniline Leather',
+        'Heated Front Seats',
+        'Heated Steering Wheel',
+        'Heated Rear Outboard Seats',
+        '8-Way Power Driver Seat',
+        'Panoramic Moonroof',
+        'Power Liftgate with Motion Activation'
+      ]
+    },
+    specs: { mpg: '30 city / 37 hwy', horsepower: 201, seating: 5, towingLb: 1500, groundClearanceIn: 8.2 }
+  },
+  {
+    id: 'outlander',
+    name: 'Mitsubishi Outlander',
+    trim: 'ES (NEW)',
+    segment: 'NEW',
+    priceLow: 28000,
+    priceHigh: 30000,
+    cargoMax: 64.3,
+    cargoBehind: 30.0,
+    awd: 'available',
+    warranty: '10yr/100k powertrain, 5yr/60k bumper-to-bumper',
+    note: '10-year warranty + optional 3rd row seating (rare in this class). Mitsubishi heavily incentivized for subprime.',
+    images: {
+      exterior: 'https://upload.wikimedia.org/wikipedia/commons/2/23/2022_Mitsubishi_Outlander_SEL_2.5_in_Alloy_Silver%2C_front_left.jpg',
+      interior: 'https://upload.wikimedia.org/wikipedia/commons/4/4b/2023_Mitsubishi_Outlander_interior.jpg',
+      rear: 'https://upload.wikimedia.org/wikipedia/commons/f/f9/2022_Mitsubishi_Outlander_SEL_2.5_in_Alloy_Silver%2C_rear_left.jpg'
+    },
+    manufacturerUrl: 'https://www.mitsubishicars.com/outlander',
+    searchUrlSlug: { make: 'mitsubishi', model: 'outlander' },
+    safety: {
+      suite: 'MI-PILOT Assist',
+      standard: [
+        'Forward Collision Mitigation',
+        'Blind Spot Warning with Lane Change Assist',
+        'Rear Cross Traffic Alert',
+        'Lane Departure Warning',
+        'Auto High Beam',
+        'Adaptive Cruise Control',
+        'Driver Attention Alert',
+        'Hill Start Assist'
+      ],
+      available: [
+        'MI-PILOT Assist (semi-autonomous highway driving)',
+        'Multi-View Camera (360)',
+        'Front and Rear Parking Sensors',
+        'Predictive Forward Collision Warning'
+      ]
+    },
+    tech: {
+      standard: [
+        '8" Touchscreen',
+        'Apple CarPlay (wireless)',
+        'Android Auto (wired)',
+        'Bluetooth + USB',
+        '6-Speaker Audio'
+      ],
+      available: [
+        '9" Touchscreen with Built-in Nav',
+        '12.3" Digital Driver Display',
+        'Wireless Phone Charging',
+        'Bose 10-Speaker Premium Audio',
+        'Head-Up Display',
+        'Tri-Zone Auto Climate'
+      ]
+    },
+    comfort: {
+      standard: [
+        'Cloth Seats',
+        'Auto Climate Control',
+        'Push-Button Start',
+        '60/40 Split Folding 2nd Row',
+        '50/50 Split Folding 3rd Row (optional)',
+        'Up to 7 Passengers'
+      ],
+      available: [
+        'Quilted Semi-Aniline Leather',
+        'Heated Front Seats',
+        'Heated Steering Wheel',
+        'Heated 2nd Row Seats',
+        'Ventilated Front Seats',
+        '8-Way Power Driver Seat',
+        'Panoramic Sunroof',
+        'Power Liftgate'
+      ]
+    },
+    specs: { mpg: '24 city / 31 hwy', horsepower: 181, seating: 7, towingLb: 2000, groundClearanceIn: 8.3 }
+  }
+];
+
+export const PREQUAL_SITES = [
+  { name: 'Capital One Auto Navigator', url: 'https://www.capitalone.com/cars/', detail: 'Soft pull · 12,000+ dealers · subprime-friendly' },
+  { name: 'CarMax Pre-Approval', url: 'https://www.carmax.com/pre-qualify', detail: 'Soft pull · valid 30 days · no-haggle' },
+  { name: 'Carvana Pre-Qualify', url: 'https://www.carvana.com/financing', detail: 'Soft pull · online buying · marks up subprime' },
+  { name: 'Chase Auto', url: 'https://www.chase.com/personal/auto-loans', detail: 'If you bank with Chase · existing customer rates' }
+];
+
+export const WI_CREDIT_UNIONS = [
+  { name: 'Landmark Credit Union', url: 'https://www.landmarkcu.com/', detail: 'Statewide WI · large footprint' },
+  { name: 'UW Credit Union', url: 'https://www.uwcu.org/', detail: 'Open to anyone in WI · competitive rates' },
+  { name: 'Summit Credit Union', url: 'https://www.summitcreditunion.com/', detail: 'Madison area · member-friendly' },
+  { name: 'Educators Credit Union', url: 'https://www.ecu.com/', detail: 'Racine area · WI-wide membership' },
+  { name: 'Connexus Credit Union', url: 'https://www.connexuscu.org/', detail: 'Wausau · statewide' }
+];
+
+export const SHOP_SITES = [
+  { name: 'CarGurus', url: 'https://www.cargurus.com/', detail: 'Best deal-rating algorithm' },
+  { name: 'Autotrader', url: 'https://www.autotrader.com/', detail: 'Biggest inventory selection' },
+  { name: 'Cars.com', url: 'https://www.cars.com/', detail: 'Clean comparison UI' },
+  { name: 'TrueCar', url: 'https://www.truecar.com/', detail: 'Shows what others paid in your area' },
+  { name: 'CarMax', url: 'https://www.carmax.com/', detail: 'No-haggle, big CPO inventory' },
+  { name: 'Carvana', url: 'https://www.carvana.com/', detail: 'Online + delivery' }
+];
+
+export const WI_DEALERS = [
+  { name: 'Bergstrom Automotive', url: 'https://www.bergstromauto.com/', detail: 'Huge WI footprint, multi-brand' },
+  { name: 'Russ Darrow', url: 'https://www.russdarrow.com/', detail: 'Milwaukee/SE Wisconsin' },
+  { name: 'Ewald Automotive', url: 'https://www.ewaldauto.com/', detail: 'Milwaukee area' },
+  { name: 'Boucher Automotive', url: 'https://www.boucher.com/', detail: 'Milwaukee/Waukesha area' },
+  { name: 'Kayser Automotive', url: 'https://www.kayserauto.com/', detail: 'Madison area' }
+];
+
+export const TRAPS = [
+  { title: '"Buy here pay here" lots', body: 'APR runs 20-29%. Cars are usually garbage. Predatory by design — avoid entirely.' },
+  { title: 'Loans 84+ months', body: "Underwater for 4-5 years. Can't trade out. Pays thousands more in interest total." },
+  { title: 'Dealer GAP insurance', body: '$800-1500 at the dealer. Get the same coverage from Geico/Progressive for $40-60/yr.' },
+  { title: 'Extended warranties at signing', body: 'Pure dealer profit. Hyundai/Kia/Mitsubishi already cover you 10yr/100k. Decline.' },
+  { title: '"Let us shop your rate"', body: "Dealer adds 1-3% on top as their cut. Use YOUR pre-approval as the benchmark instead." },
+  { title: 'Yo-yo financing', body: 'Dealer calls 5 days later: "Financing fell through, come back in." Walk away.' },
+  { title: 'Add-ons (paint, fabric, VIN etch)', body: '$1,500+ of nothing. Decline every single F&I add-on.' },
+  { title: 'Rolling negative equity', body: 'Rolls old loan balance into new one. Underwater day one. Sell your old car privately first if possible.' },
+  { title: 'Skipping the test drive', body: 'Always drive at least 30 minutes including highway. Listen for noises, check blind spots.' },
+  { title: 'No pre-purchase inspection', body: '$100-150 at independent mechanic catches $5,000 problems on used cars. Non-negotiable for CPO.' }
+];
+
+export const CHECKLIST_STEPS = [
+  {
+    id: 'w1',
+    week: 'Week 1',
+    title: 'Prep your credit profile',
+    items: [
+      { id: 'w1-1', text: 'Check credit score on Credit Karma (free)' },
+      { id: 'w1-2', text: 'Pull full credit report at annualcreditreport.com' },
+      { id: 'w1-3', text: 'Dispute any errors on credit report' },
+      { id: 'w1-4', text: 'Save additional down if possible (every $1k = $22/mo savings)' },
+      { id: 'w1-5', text: 'Make recent bills perfect (last 2-3 months matter most)' }
+    ]
+  },
+  {
+    id: 'w2',
+    week: 'Week 2',
+    title: 'Pre-approval shopping',
+    items: [
+      { id: 'w2-1', text: 'Apply at local credit union (membership first if needed)' },
+      { id: 'w2-2', text: 'Apply at Capital One Auto Navigator' },
+      { id: 'w2-3', text: 'Apply at CarMax for no-haggle benchmark' },
+      { id: 'w2-4', text: 'Compare APRs from all three' },
+      { id: 'w2-5', text: 'Save best APR as your benchmark' }
+    ]
+  },
+  {
+    id: 'w3',
+    week: 'Week 3',
+    title: 'Hunt for the car',
+    items: [
+      { id: 'w3-1', text: 'Decide CPO vs new based on real budget' },
+      { id: 'w3-2', text: 'Build target spec on manufacturer site' },
+      { id: 'w3-3', text: 'Search CarGurus + Autotrader within 100 miles' },
+      { id: 'w3-4', text: 'Sort by deal rating' },
+      { id: 'w3-5', text: 'Cross-check on TrueCar for fair price' },
+      { id: 'w3-6', text: 'Shortlist 3-5 specific cars at specific dealers' }
+    ]
+  },
+  {
+    id: 'w4',
+    week: 'Week 4',
+    title: 'Negotiate and buy',
+    items: [
+      { id: 'w4-1', text: 'Email dealer asking for OTD price in writing' },
+      { id: 'w4-2', text: 'Compare OTD prices across dealers' },
+      { id: 'w4-3', text: 'Visit best 1-2 only, test drive 30+ minutes' },
+      { id: 'w4-4', text: 'For CPO: arrange independent pre-purchase inspection' },
+      { id: 'w4-5', text: 'Negotiate against OTD + your pre-approval' },
+      { id: 'w4-6', text: 'Decline ALL F&I add-ons (GAP, warranty, paint, etc)' },
+      { id: 'w4-7', text: 'Verify monthly is under cap INCLUDING tax/title/registration' },
+      { id: 'w4-8', text: 'Sign the deal' }
+    ]
+  }
+];
+
+export function getVehicleById(id: string): Vehicle | undefined {
+  return VEHICLES.find(v => v.id === id);
+}
