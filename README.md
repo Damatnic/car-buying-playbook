@@ -51,6 +51,43 @@ npm install -g vercel
 vercel
 ```
 
+## Sync between devices (you ↔ spouse)
+
+The app supports three ways to share saves between your laptop and your spouse's:
+
+### Option 1: Link or short code (works immediately, no setup)
+
+1. Go to `/sync` on your device
+2. Tab "Share My Data"
+3. Copy the link (or the short code if the link is too long for SMS)
+4. Send to your spouse
+5. They open the link (auto-imports) or paste the code at `/sync` → "Import / Receive"
+6. Choose merge or replace, click Import
+
+This is one-shot — they get a snapshot of your data at that moment. To re-share, repeat. Plenty for a couple shopping for one car together.
+
+### Option 2: Cloud auto-sync (one-time setup, then automatic)
+
+Both of you enter the same household code (e.g. `DAMATO-CAR`). Saves go to a free Vercel KV database, keyed by the code. Either of you saves → the other clicks Load and gets it.
+
+**Setup (one-time):**
+
+```bash
+# After deploying to Vercel:
+vercel env pull .env.development.local        # for local dev
+# In Vercel dashboard: Storage > Create Database > KV > select project
+# Vercel injects KV_REST_API_URL and KV_REST_API_TOKEN automatically.
+# Redeploy. Cloud sync now works.
+```
+
+If you haven't set this up, the cloud-sync tab returns a 501 with a helpful message and you can still use option 1.
+
+The household code is the only "auth" — anyone who knows the code can read and write that data. Don't share the code publicly. Pick something unguessable like `DAMATO-CAR-2026`. Data expires after 30 days of inactivity.
+
+### Option 3: JSON file backup
+
+Sync page → Share tab → Download File. Keeps a backup file. Re-import any time via Import tab.
+
 ## Storage model
 
 All user data lives in `localStorage` under the `cbp:` prefix:

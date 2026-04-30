@@ -9,7 +9,8 @@ const links = [
   { href: '/compare', label: 'Compare' },
   { href: '/checklist', label: 'Checklist' },
   { href: '/traps', label: 'Traps' },
-  { href: '/resources', label: 'Resources' }
+  { href: '/resources', label: 'Resources' },
+  { href: '/sync', label: 'Sync' }
 ];
 
 export function Nav() {
