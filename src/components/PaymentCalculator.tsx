@@ -59,10 +59,10 @@ export function PaymentCalculator({
   }, [price, down, apr, term]);
 
   return (
-    <div className="rounded-2xl border border-border bg-surface p-5 shadow-2xl shadow-black/40 sm:p-7">
-      <div className="grid gap-6 lg:grid-cols-2">
+    <div className="rounded-2xl border border-border bg-surface p-4 shadow-2xl shadow-black/40 sm:p-7">
+      <div className="grid gap-5 lg:grid-cols-2 lg:gap-6">
         {/* Controls */}
-        <div className="flex flex-col gap-5">
+        <div className="flex flex-col gap-4 sm:gap-5">
           <SliderRow
             label="Sticker Price"
             value={price}
@@ -86,16 +86,16 @@ export function PaymentCalculator({
           />
           <div>
             <label className="mb-2 block text-sm">Loan Term</label>
-            <div className="flex gap-2">
+            <div className="grid grid-cols-4 gap-2">
               {TERMS.map(t => (
                 <button
                   key={t}
                   onClick={() => setTerm(t)}
                   className={cn(
-                    'flex-1 rounded-lg border px-3 py-2 text-sm font-semibold transition-all',
+                    'rounded-lg border px-2 py-2.5 text-sm font-semibold transition-all',
                     term === t
                       ? 'border-transparent bg-gradient text-white'
-                      : 'border-border bg-surface-2 text-text-dim hover:text-text'
+                      : 'border-border bg-surface-2 text-text-dim hover:text-text active:bg-surface'
                   )}
                 >
                   {t}mo
@@ -107,16 +107,16 @@ export function PaymentCalculator({
 
         {/* Result */}
         <div className={cn(
-          'relative flex flex-col items-center justify-center overflow-hidden rounded-xl bg-surface-2 p-6 text-center transition-all',
+          'relative flex flex-col items-center justify-center overflow-hidden rounded-xl bg-surface-2 p-5 text-center transition-all sm:p-6',
           over && 'ring-1 ring-danger/30'
         )}>
-          <div className="mb-2 text-xs uppercase tracking-widest text-text-dim">Monthly Payment</div>
+          <div className="mb-2 text-[11px] uppercase tracking-widest text-text-dim sm:text-xs">Monthly Payment</div>
           <div className={cn(
-            'text-5xl font-extrabold tabular-nums leading-none',
+            'text-4xl font-extrabold tabular-nums leading-none sm:text-5xl',
             over ? 'gradient-text-warn' : 'gradient-text'
           )}>
             {fmtCurrency(result.monthlyPayment)}
-            <span className="text-2xl">/mo</span>
+            <span className="text-xl sm:text-2xl">/mo</span>
           </div>
           <div className={cn(
             'mt-4 rounded-full border px-3 py-1 text-sm font-semibold',

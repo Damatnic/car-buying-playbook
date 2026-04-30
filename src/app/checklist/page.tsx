@@ -4,8 +4,8 @@ import { Section, Callout } from '@/components/Section';
 export default function ChecklistPage() {
   return (
     <div>
-      <header className="border-b border-border pb-6">
-        <h1 className="text-3xl font-extrabold sm:text-4xl">
+      <header className="border-b border-border pb-5 sm:pb-6">
+        <h1 className="text-2xl font-extrabold leading-tight sm:text-4xl">
           <span className="gradient-text">4-Week Buying Checklist</span>
         </h1>
         <p className="mt-2 text-text-dim">

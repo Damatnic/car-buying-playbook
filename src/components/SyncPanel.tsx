@@ -166,21 +166,22 @@ export function SyncPanel() {
         </div>
       )}
 
-      <div className="flex flex-wrap gap-1 border-b border-border">
+      <div className="-mx-4 flex gap-1 overflow-x-auto border-b border-border px-4 no-scrollbar sm:mx-0 sm:px-0">
         {([
-          { id: 'share', label: '📤 Share My Data' },
-          { id: 'import', label: '📥 Import / Receive' },
-          { id: 'cloud', label: '☁️ Auto-Sync (Cloud)' }
+          { id: 'share', label: '📤 Share', fullLabel: '📤 Share My Data' },
+          { id: 'import', label: '📥 Import', fullLabel: '📥 Import / Receive' },
+          { id: 'cloud', label: '☁️ Auto-Sync', fullLabel: '☁️ Auto-Sync (Cloud)' }
         ] as const).map(t => (
           <button
             key={t.id}
             onClick={() => setTab(t.id)}
             className={cn(
-              'border-b-2 px-3 py-2 text-sm font-semibold transition-colors',
+              'whitespace-nowrap border-b-2 px-3 py-2.5 text-sm font-semibold transition-colors',
               tab === t.id ? 'border-accent text-text' : 'border-transparent text-text-dim hover:text-text'
             )}
           >
-            {t.label}
+            <span className="sm:hidden">{t.label}</span>
+            <span className="hidden sm:inline">{t.fullLabel}</span>
           </button>
         ))}
       </div>

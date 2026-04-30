@@ -15,7 +15,11 @@
   --accent-glow: rgba(139, 92, 246, 0.4);
 }
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
 
 body {
   background-color: var(--bg);
@@ -24,7 +28,55 @@ body {
     radial-gradient(circle at 15% 10%, rgba(139, 92, 246, 0.08) 0%, transparent 40%),
     radial-gradient(circle at 85% 70%, rgba(6, 182, 212, 0.06) 0%, transparent 45%);
   background-attachment: fixed;
-  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: hidden;
+}
+
+/* iOS safe-area handling */
+@supports (padding: max(0px)) {
+  .safe-px {
+    padding-left: max(1.25rem, env(safe-area-inset-left));
+    padding-right: max(1.25rem, env(safe-area-inset-right));
+  }
+  .safe-pb {
+    padding-bottom: max(2rem, env(safe-area-inset-bottom));
+  }
+}
+
+/* iOS Safari text input zoom prevention */
+@media (max-width: 640px) {
+  input[type='text'],
+  input[type='number'],
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+}
+
+/* Tap targets — minimum 44px on touch devices */
+@media (hover: none) and (pointer: coarse) {
+  button, a {
+    min-height: 36px;
+  }
+}
+
+/* Better scroll affordance on horizontal scroll containers */
+.scroll-x {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  position: relative;
+}
+.scroll-x::after {
+  content: '';
+  position: sticky;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 24px;
+  background: linear-gradient(to right, transparent, var(--bg) 90%);
+  pointer-events: none;
+  flex-shrink: 0;
 }
 
 .gradient-text {
@@ -71,3 +123,7 @@ input[type='range']::-moz-range-thumb {
 .scrollbar-thin::-webkit-scrollbar-track { background: var(--surface); }
 .scrollbar-thin::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
 .scrollbar-thin::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+/* Hide scrollbar but keep scroll functionality (used in nav) */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }

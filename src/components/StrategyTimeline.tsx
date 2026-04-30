@@ -75,12 +75,12 @@ export function StrategyTimeline({ interactive = false }: { interactive?: boolea
                         <button
                           onClick={() => toggle(item.id)}
                           className={cn(
-                            'flex w-full items-start gap-2 rounded-md px-2 py-1 text-left text-sm transition-colors hover:bg-surface',
+                            'flex w-full items-start gap-3 rounded-md px-2 py-2 text-left text-sm transition-colors hover:bg-surface active:bg-surface-2',
                             done && 'text-text-faint line-through'
                           )}
                         >
                           <span className={cn(
-                            'mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded border text-[10px] font-bold transition-colors',
+                            'mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded border text-xs font-bold transition-colors',
                             done ? 'border-success bg-success/20 text-success' : 'border-border'
                           )}>
                             {done ? '✓' : ''}

@@ -12,14 +12,14 @@ export default function Home() {
   return (
     <div>
       {/* Hero */}
-      <header className="border-b border-border pb-8 pt-2 text-center">
-        <h1 className="mb-2 text-4xl font-extrabold tracking-tight sm:text-5xl">
+      <header className="border-b border-border pb-6 pt-1 text-center sm:pb-8 sm:pt-2">
+        <h1 className="mb-2 text-3xl font-extrabold leading-tight tracking-tight sm:text-5xl">
           <span className="gradient-text">SUV Buying Playbook</span>
         </h1>
-        <p className="mx-auto mt-3 max-w-2xl text-text-dim">
+        <p className="mx-auto mt-2 max-w-2xl text-sm text-text-dim sm:mt-3 sm:text-base">
           Subprime credit strategy for compact SUVs with real interior room. Wisconsin focused.
         </p>
-        <div className="mt-5 flex flex-wrap justify-center gap-2 text-sm">
+        <div className="mt-4 flex flex-wrap justify-center gap-1.5 text-xs sm:mt-5 sm:gap-2 sm:text-sm">
           {[
             ['Budget', '$25-30k'],
             ['Monthly', '< $500'],
@@ -27,8 +27,8 @@ export default function Home() {
             ['Credit', 'Subprime'],
             ['No co-signer', '']
           ].map(([k, v]) => (
-            <span key={k} className="rounded-full border border-border bg-surface px-3 py-1 text-text-dim">
-              {k}{v && <strong className="ml-1.5 text-text">{v}</strong>}
+            <span key={k} className="rounded-full border border-border bg-surface px-2.5 py-1 text-text-dim sm:px-3">
+              {k}{v && <strong className="ml-1 text-text sm:ml-1.5">{v}</strong>}
             </span>
           ))}
         </div>
