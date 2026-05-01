@@ -140,12 +140,17 @@ export async function GET(req: NextRequest) {
   url.searchParams.set('zip', zip);
   url.searchParams.set('radius', String(radius));
   url.searchParams.set('rows', String(rows));
-  url.searchParams.set('sort_by', 'dom_active');
-  url.searchParams.set('sort_order', 'asc');
   url.searchParams.set('inventory_type', 'used');
   // Pass dealer_name to MarketCheck so they surface those listings in results.
   // We still filter client-side as a secondary check.
-  if (dealerFilter) url.searchParams.set('dealer_name', dealerFilter);
+  if (dealerFilter) {
+    url.searchParams.set('dealer_name', dealerFilter);
+    // Sort by relevance (default) when filtering by dealer — sort_by=dom_active
+    // pushes specific-dealer matches out of the top 50 results.
+  } else {
+    url.searchParams.set('sort_by', 'dom_active');
+    url.searchParams.set('sort_order', 'asc');
+  }
 
   // Retry with exponential backoff if MarketCheck rate-limits us
   let res: Response | null = null;
