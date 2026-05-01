@@ -96,7 +96,10 @@ export function LiveInventory() {
         make: modelDef.make,
         model: modelDef.model,
         zip,
-        radius: String(scope === 'waukesha' ? Math.min(radius, 25) : radius),
+        // For Waukesha-store scope, use a wide radius — the dealer-name filter
+        // is what limits results, and MarketCheck sometimes indexes the
+        // dealer at a non-Waukesha center point.
+        radius: String(scope === 'waukesha' ? Math.max(radius, 100) : radius),
         maxPrice: String(maxPrice),
         minYear: '2022',
         rows: String(rowsLimit)
