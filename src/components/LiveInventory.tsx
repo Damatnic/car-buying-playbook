@@ -48,8 +48,14 @@ const MODELS = [
   { make: 'mitsubishi', model: 'outlander', label: 'Mitsubishi Outlander' }
 ] as const;
 
-type DealerScope = 'all' | 'carmax';
+type DealerScope = 'waukesha' | 'nearby_carmax' | 'all_dealers';
 type ActiveModel = 'all' | typeof MODELS[number]['model'];
+
+const SCOPE_DEALER_FILTER: Record<DealerScope, string> = {
+  waukesha: 'Carmax Waukesha',
+  nearby_carmax: 'carmax',
+  all_dealers: ''
+};
 
 type CellState = InventoryResponse | { error: string } | 'loading' | undefined;
 
@@ -57,8 +63,8 @@ export function LiveInventory() {
   const [active, setActive] = useState<ActiveModel>('all');
   const [zip, setZip] = useState('53186');
   const [radius, setRadius] = useState(50);
-  const [maxPrice, setMaxPrice] = useState(28000);
-  const [scope, setScope] = useState<DealerScope>('carmax');
+  const [maxPrice, setMaxPrice] = useState(30000);
+  const [scope, setScope] = useState<DealerScope>('waukesha');
   const [data, setData] = useState<Record<string, CellState>>({});
   const [savedVins, setSavedVins] = useState<Set<string>>(new Set());
   const inflight = useRef<Set<string>>(new Set());
@@ -90,12 +96,13 @@ export function LiveInventory() {
         make: modelDef.make,
         model: modelDef.model,
         zip,
-        radius: String(radius),
+        radius: String(scope === 'waukesha' ? Math.min(radius, 25) : radius),
         maxPrice: String(maxPrice),
         minYear: '2022',
         rows: String(rowsLimit)
       });
-      if (scope === 'carmax') params.set('dealerFilter', 'carmax');
+      const filter = SCOPE_DEALER_FILTER[scope];
+      if (filter) params.set('dealerFilter', filter);
       const res = await fetch(`/api/inventory?${params}`);
       if (!res.ok) {
         const errBody = await res.text();
@@ -109,6 +116,7 @@ export function LiveInventory() {
     } finally {
       inflight.current.delete(key);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cacheKey, zip, radius, maxPrice, scope]);
 
   const loadAll = useCallback(async () => {
@@ -161,33 +169,51 @@ export function LiveInventory() {
 
   return (
     <div className="space-y-3">
-      {/* Dealer scope toggle */}
-      <div className="grid grid-cols-2 gap-2">
+      {/* Dealer scope toggle - 3 modes */}
+      <div className="grid grid-cols-3 gap-2">
         <button
-          onClick={() => setScope('all')}
+          onClick={() => setScope('waukesha')}
           className={cn(
-            'rounded-xl border px-4 py-3 text-sm font-bold transition-all',
-            scope === 'all'
-              ? 'border-accent bg-accent/15 text-accent'
-              : 'border-border bg-surface text-text-dim hover:border-accent/40'
-          )}
-        >
-          🏢 All Dealers Nearby
-          <div className="mt-0.5 text-[10px] font-normal text-text-faint">CarMax + franchise + independents</div>
-        </button>
-        <button
-          onClick={() => setScope('carmax')}
-          className={cn(
-            'rounded-xl border px-4 py-3 text-sm font-bold transition-all',
-            scope === 'carmax'
+            'rounded-xl border px-3 py-3 text-xs font-bold transition-all sm:text-sm',
+            scope === 'waukesha'
               ? 'border-success bg-success/15 text-success'
               : 'border-border bg-surface text-text-dim hover:border-success/40'
           )}
         >
-          🎯 CarMax Only
-          <div className="mt-0.5 text-[10px] font-normal text-text-faint">Just CarMax inventory</div>
+          🏠 Waukesha CarMax
+          <div className="mt-0.5 text-[9px] font-normal text-text-faint sm:text-[10px]">Just your store</div>
+        </button>
+        <button
+          onClick={() => setScope('nearby_carmax')}
+          className={cn(
+            'rounded-xl border px-3 py-3 text-xs font-bold transition-all sm:text-sm',
+            scope === 'nearby_carmax'
+              ? 'border-accent-2 bg-accent-2/15 text-accent-2'
+              : 'border-border bg-surface text-text-dim hover:border-accent-2/40'
+          )}
+        >
+          🚚 Nearby CarMax
+          <div className="mt-0.5 text-[9px] font-normal text-text-faint sm:text-[10px]">Transferable to Waukesha</div>
+        </button>
+        <button
+          onClick={() => setScope('all_dealers')}
+          className={cn(
+            'rounded-xl border px-3 py-3 text-xs font-bold transition-all sm:text-sm',
+            scope === 'all_dealers'
+              ? 'border-accent bg-accent/15 text-accent'
+              : 'border-border bg-surface text-text-dim hover:border-accent/40'
+          )}
+        >
+          🏢 All Dealers
+          <div className="mt-0.5 text-[9px] font-normal text-text-faint sm:text-[10px]">Wider selection</div>
         </button>
       </div>
+
+      {scope === 'waukesha' && (
+        <div className="rounded-md border border-success/30 bg-success/5 px-3 py-2 text-[11px] text-success/90">
+          📍 Showing inventory at <strong>CarMax Waukesha only</strong>. If empty, switch to &ldquo;Nearby CarMax&rdquo; — they transfer cars free between stores within ~250mi.
+        </div>
+      )}
 
       {/* Filter bar */}
       <div className="rounded-xl border border-border bg-surface p-3 sm:p-4">
@@ -205,7 +231,7 @@ export function LiveInventory() {
               <span>Radius</span><span className="text-accent-2">{radius}mi</span>
             </label>
             <input
-              type="range" min={10} max={150} step={10} value={radius}
+              type="range" min={25} max={500} step={25} value={radius}
               onChange={e => setRadius(Number(e.target.value))} className="w-full"
             />
           </div>
@@ -214,7 +240,7 @@ export function LiveInventory() {
               <span>Max</span><span className="text-accent-2">{fmtCurrency(maxPrice)}</span>
             </label>
             <input
-              type="range" min={15000} max={35000} step={500} value={maxPrice}
+              type="range" min={15000} max={40000} step={500} value={maxPrice}
               onChange={e => setMaxPrice(Number(e.target.value))} className="w-full"
             />
           </div>
@@ -252,19 +278,24 @@ export function LiveInventory() {
 
       <div className="flex items-baseline justify-between">
         <div className="text-xs text-text-faint">
-          {active === 'all'
-            ? `📡 Showing top 4 per model · ${scope === 'carmax' ? 'CarMax only' : 'all dealers'} · ${radius}mi from ${zip}`
-            : (() => {
-                const cur = data[cacheKey(active)];
-                if (cur === 'loading') return '⏳ Loading…';
-                if (cur && typeof cur === 'object' && 'count' in cur) {
-                  return `📡 ${cur.count} of ${cur.totalAvailable.toLocaleString()} ${scope === 'carmax' ? 'CarMax' : 'total'} found`;
-                }
-                if (cur && typeof cur === 'object' && 'error' in cur) {
-                  return <span className="text-danger">Error: {cur.error}</span>;
-                }
-                return '';
-              })()}
+          {(() => {
+            const scopeLabel =
+              scope === 'waukesha' ? 'CarMax Waukesha only'
+              : scope === 'nearby_carmax' ? 'Nearby CarMax stores'
+              : 'All dealers';
+            if (active === 'all') {
+              return `📡 Showing top 4 per model · ${scopeLabel} · ${radius}mi from ${zip}`;
+            }
+            const cur = data[cacheKey(active)];
+            if (cur === 'loading') return '⏳ Loading…';
+            if (cur && typeof cur === 'object' && 'count' in cur) {
+              return `📡 ${cur.count} of ${cur.totalAvailable.toLocaleString()} found · ${scopeLabel}`;
+            }
+            if (cur && typeof cur === 'object' && 'error' in cur) {
+              return <span className="text-danger">Error: {cur.error}</span>;
+            }
+            return '';
+          })()}
         </div>
         <button
           onClick={refreshActive}
@@ -323,7 +354,7 @@ function ModelSection({
         <h3 className="text-base font-bold sm:text-lg">{model.label}</h3>
         <div className="flex items-center gap-2 text-xs text-text-faint">
           {hasData && total > 0 && (
-            <span><span className="font-bold text-text">{total}</span> nearby</span>
+            <span><span className="font-bold text-text">{total}</span> available</span>
           )}
           {hasData && total > listings.length && (
             <button onClick={onSeeMore} className="font-semibold text-accent-2 hover:underline">
@@ -343,7 +374,7 @@ function ModelSection({
         </div>
       ) : listings.length === 0 ? (
         <div className="rounded-md border border-dashed border-border bg-bg/30 p-3 text-center text-xs text-text-faint">
-          No listings under filters
+          None at this store. Try the &ldquo;Nearby CarMax&rdquo; or &ldquo;All Dealers&rdquo; toggle above.
         </div>
       ) : (
         <div className="grid gap-2 sm:grid-cols-2">
