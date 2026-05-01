@@ -114,8 +114,8 @@ export async function GET(req: NextRequest) {
   const minYear = Math.min(2026, Math.max(2010, Number(clean(params, 'minYear', '2022'))));
   const dealerFilter = clean(params, 'dealerFilter', '');
   const requestedRows = Math.min(50, Math.max(1, Number(clean(params, 'rows', '12'))));
-  // When filtering by dealer, fetch more rows to compensate for client-side filtering
-  const rows = dealerFilter ? Math.min(50, requestedRows * 4) : requestedRows;
+  // When filtering by dealer, fetch the max allowed so client-side filter has enough to work with
+  const rows = dealerFilter ? 50 : requestedRows;
 
   if (!ALLOWED_MAKES.has(make)) {
     return NextResponse.json({ error: 'make not in allowlist' }, { status: 400 });
