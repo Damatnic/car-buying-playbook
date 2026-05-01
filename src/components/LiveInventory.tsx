@@ -48,23 +48,28 @@ const MODELS = [
   { make: 'mitsubishi', model: 'outlander', label: 'Mitsubishi Outlander' }
 ] as const;
 
-type DealerScope = 'waukesha' | 'nearby_carmax' | 'all_dealers';
+type DealerScope = 'carmax_network' | 'all_dealers';
 type ActiveModel = 'all' | typeof MODELS[number]['model'];
 
 const SCOPE_DEALER_FILTER: Record<DealerScope, string> = {
-  waukesha: 'Carmax Waukesha',
-  nearby_carmax: 'carmax',
+  carmax_network: 'carmax',
   all_dealers: ''
 };
+
+const HOME_STORE = 'waukesha';
+
+function isHomeStore(dealerName?: string): boolean {
+  return !!dealerName && dealerName.toLowerCase().includes(HOME_STORE);
+}
 
 type CellState = InventoryResponse | { error: string } | 'loading' | undefined;
 
 export function LiveInventory() {
   const [active, setActive] = useState<ActiveModel>('all');
   const [zip, setZip] = useState('53186');
-  const [radius, setRadius] = useState(50);
+  const [radius, setRadius] = useState(150);
   const [maxPrice, setMaxPrice] = useState(30000);
-  const [scope, setScope] = useState<DealerScope>('waukesha');
+  const [scope, setScope] = useState<DealerScope>('carmax_network');
   const [data, setData] = useState<Record<string, CellState>>({});
   const [savedVins, setSavedVins] = useState<Set<string>>(new Set());
   const inflight = useRef<Set<string>>(new Set());
@@ -96,10 +101,7 @@ export function LiveInventory() {
         make: modelDef.make,
         model: modelDef.model,
         zip,
-        // For Waukesha-store scope, use a wide radius — the dealer-name filter
-        // is what limits results, and MarketCheck sometimes indexes the
-        // dealer at a non-Waukesha center point.
-        radius: String(scope === 'waukesha' ? Math.max(radius, 100) : radius),
+        radius: String(radius),
         maxPrice: String(maxPrice),
         minYear: '2022',
         rows: String(rowsLimit)
@@ -172,49 +174,37 @@ export function LiveInventory() {
 
   return (
     <div className="space-y-3">
-      {/* Dealer scope toggle - 3 modes */}
-      <div className="grid grid-cols-3 gap-2">
+      {/* Dealer scope toggle */}
+      <div className="grid grid-cols-2 gap-2">
         <button
-          onClick={() => setScope('waukesha')}
+          onClick={() => setScope('carmax_network')}
           className={cn(
-            'rounded-xl border px-3 py-3 text-xs font-bold transition-all sm:text-sm',
-            scope === 'waukesha'
+            'rounded-xl border px-4 py-3 text-sm font-bold transition-all',
+            scope === 'carmax_network'
               ? 'border-success bg-success/15 text-success'
               : 'border-border bg-surface text-text-dim hover:border-success/40'
           )}
         >
-          🏠 Waukesha CarMax
-          <div className="mt-0.5 text-[9px] font-normal text-text-faint sm:text-[10px]">Just your store</div>
-        </button>
-        <button
-          onClick={() => setScope('nearby_carmax')}
-          className={cn(
-            'rounded-xl border px-3 py-3 text-xs font-bold transition-all sm:text-sm',
-            scope === 'nearby_carmax'
-              ? 'border-accent-2 bg-accent-2/15 text-accent-2'
-              : 'border-border bg-surface text-text-dim hover:border-accent-2/40'
-          )}
-        >
-          🚚 Nearby CarMax
-          <div className="mt-0.5 text-[9px] font-normal text-text-faint sm:text-[10px]">Transferable to Waukesha</div>
+          🎯 CarMax Network
+          <div className="mt-0.5 text-[10px] font-normal text-text-faint">Waukesha + transferable</div>
         </button>
         <button
           onClick={() => setScope('all_dealers')}
           className={cn(
-            'rounded-xl border px-3 py-3 text-xs font-bold transition-all sm:text-sm',
+            'rounded-xl border px-4 py-3 text-sm font-bold transition-all',
             scope === 'all_dealers'
               ? 'border-accent bg-accent/15 text-accent'
               : 'border-border bg-surface text-text-dim hover:border-accent/40'
           )}
         >
           🏢 All Dealers
-          <div className="mt-0.5 text-[9px] font-normal text-text-faint sm:text-[10px]">Wider selection</div>
+          <div className="mt-0.5 text-[10px] font-normal text-text-faint">CarMax + franchise</div>
         </button>
       </div>
 
-      {scope === 'waukesha' && (
+      {scope === 'carmax_network' && (
         <div className="rounded-md border border-success/30 bg-success/5 px-3 py-2 text-[11px] text-success/90">
-          📍 Showing inventory at <strong>CarMax Waukesha only</strong>. If empty, switch to &ldquo;Nearby CarMax&rdquo; — they transfer cars free between stores within ~250mi.
+          🏠 <strong>WAUKESHA</strong> badge = at your store, ready to test drive · 🚚 <strong>TRANSFER</strong> badge = at another CarMax, free transfer to Waukesha (typical 5-7 days)
         </div>
       )}
 
@@ -283,8 +273,7 @@ export function LiveInventory() {
         <div className="text-xs text-text-faint">
           {(() => {
             const scopeLabel =
-              scope === 'waukesha' ? 'CarMax Waukesha only'
-              : scope === 'nearby_carmax' ? 'Nearby CarMax stores'
+              scope === 'carmax_network' ? 'CarMax Waukesha + transferable'
               : 'All dealers';
             if (active === 'all') {
               return `📡 Showing top 4 per model · ${scopeLabel} · ${radius}mi from ${zip}`;
@@ -348,8 +337,17 @@ function ModelSection({
   const isLoading = cell === 'loading';
   const hasError = cell && typeof cell === 'object' && 'error' in cell;
   const hasData = cell && typeof cell === 'object' && 'listings' in cell;
-  const listings = hasData ? cell.listings : [];
+  // Sort: Waukesha listings first, then by distance
+  const listings = hasData
+    ? [...cell.listings].sort((a, b) => {
+        const aHome = isHomeStore(a.dealerName) ? 0 : 1;
+        const bHome = isHomeStore(b.dealerName) ? 0 : 1;
+        if (aHome !== bHome) return aHome - bHome;
+        return (a.dealerDistance ?? 9999) - (b.dealerDistance ?? 9999);
+      })
+    : [];
   const total = hasData ? cell.totalAvailable : 0;
+  const homeCount = listings.filter(l => isHomeStore(l.dealerName)).length;
 
   return (
     <section className="rounded-xl border border-border bg-surface/30 p-3 sm:p-4">
@@ -357,7 +355,10 @@ function ModelSection({
         <h3 className="text-base font-bold sm:text-lg">{model.label}</h3>
         <div className="flex items-center gap-2 text-xs text-text-faint">
           {hasData && total > 0 && (
-            <span><span className="font-bold text-text">{total}</span> available</span>
+            <span>
+              {homeCount > 0 && <span className="font-bold text-success">🏠 {homeCount} at Waukesha · </span>}
+              <span className="font-bold text-text">{total}</span> total
+            </span>
           )}
           {hasData && total > listings.length && (
             <button onClick={onSeeMore} className="font-semibold text-accent-2 hover:underline">
@@ -433,8 +434,26 @@ function ListingCard({
 }) {
   const priceDrop = listing.priceChangePct < -1;
   const priceUp = listing.priceChangePct > 1;
+  const isHome = isHomeStore(listing.dealerName);
+  const isCarMax = !!listing.dealerName && listing.dealerName.toLowerCase().includes('carmax');
   return (
-    <article className="overflow-hidden rounded-xl border border-border bg-surface transition-all hover:border-accent/40">
+    <article className={cn(
+      'overflow-hidden rounded-xl border bg-surface transition-all hover:border-accent/40',
+      isHome ? 'border-success ring-1 ring-success/30' : 'border-border'
+    )}>
+      {(isHome || (isCarMax && !isHome)) && (
+        <div className={cn(
+          'flex items-center justify-between px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest',
+          isHome ? 'bg-success/15 text-success' : 'bg-warning/10 text-warning'
+        )}>
+          <span>{isHome ? '🏠 At CarMax Waukesha' : '🚚 Transfer to Waukesha'}</span>
+          {!isHome && listing.dealerCity && (
+            <span className="font-semibold normal-case tracking-normal opacity-80">
+              from {listing.dealerCity}
+            </span>
+          )}
+        </div>
+      )}
       {listing.imageUrl ? (
         <a href={listing.listingUrl} target="_blank" rel="noopener noreferrer" className={cn('block overflow-hidden bg-surface-2', compact ? 'aspect-[16/9]' : 'aspect-[16/10]')}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
