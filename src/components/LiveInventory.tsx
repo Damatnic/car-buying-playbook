@@ -58,7 +58,7 @@ export function LiveInventory() {
   const [zip, setZip] = useState('53186');
   const [radius, setRadius] = useState(50);
   const [maxPrice, setMaxPrice] = useState(28000);
-  const [scope, setScope] = useState<DealerScope>('all');
+  const [scope, setScope] = useState<DealerScope>('carmax');
   const [data, setData] = useState<Record<string, CellState>>({});
   const [savedVins, setSavedVins] = useState<Set<string>>(new Set());
   const inflight = useRef<Set<string>>(new Set());
@@ -112,7 +112,12 @@ export function LiveInventory() {
   }, [cacheKey, zip, radius, maxPrice, scope]);
 
   const loadAll = useCallback(async () => {
-    await Promise.all(MODELS.map(m => loadOne(m, 4)));
+    // Stagger requests to respect MarketCheck rate limits (free tier ~5 req/sec).
+    // Sequential with small delay = no 429 errors.
+    for (const m of MODELS) {
+      await loadOne(m, 4);
+      await new Promise(r => setTimeout(r, 250));
+    }
   }, [loadOne]);
 
   useEffect(() => {

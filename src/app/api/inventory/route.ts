@@ -143,16 +143,34 @@ export async function GET(req: NextRequest) {
   url.searchParams.set('sort_order', 'asc');
   url.searchParams.set('inventory_type', 'used');
 
-  try {
-    const res = await fetch(url.toString(), {
-      headers: { Accept: 'application/json' },
-      next: { revalidate: 600 }
-    });
-    if (!res.ok) {
-      const text = await res.text();
+  // Retry with exponential backoff if MarketCheck rate-limits us
+  let res: Response | null = null;
+  let attempt = 0;
+  const maxAttempts = 3;
+  while (attempt < maxAttempts) {
+    try {
+      res = await fetch(url.toString(), {
+        headers: { Accept: 'application/json' },
+        next: { revalidate: 600 }
+      });
+      if (res.status !== 429) break;
+      attempt++;
+      if (attempt < maxAttempts) {
+        await new Promise(r => setTimeout(r, 500 * Math.pow(2, attempt - 1)));
+      }
+    } catch (e) {
       return NextResponse.json(
-        { error: `MarketCheck API error: ${res.status}`, body: text.slice(0, 500), listings: [] },
-        { status: res.status === 429 ? 429 : 502 }
+        { error: 'fetch failed', message: e instanceof Error ? e.message : 'unknown', listings: [] },
+        { status: 502 }
+      );
+    }
+  }
+  try {
+    if (!res || !res.ok) {
+      const text = res ? await res.text() : 'no response';
+      return NextResponse.json(
+        { error: `MarketCheck API error: ${res?.status ?? 'unknown'}`, body: text.slice(0, 500), listings: [] },
+        { status: res?.status === 429 ? 429 : 502 }
       );
     }
     const data = await res.json();
