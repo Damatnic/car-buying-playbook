@@ -104,7 +104,7 @@ export function LiveInventory() {
         zip,
         radius: String(radius),
         maxPrice: String(maxPrice),
-        minYear: '2022',
+        minYear: '2020',
         rows: String(rowsLimit)
       });
       const filter = SCOPE_DEALER_FILTER[scope];
