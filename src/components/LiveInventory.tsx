@@ -48,10 +48,11 @@ const MODELS = [
   { make: 'mitsubishi', model: 'outlander', label: 'Mitsubishi Outlander' }
 ] as const;
 
-type DealerScope = 'carmax_network' | 'all_dealers';
+type DealerScope = 'waukesha_only' | 'carmax_network' | 'all_dealers';
 type ActiveModel = 'all' | typeof MODELS[number]['model'];
 
 const SCOPE_DEALER_FILTER: Record<DealerScope, string> = {
+  waukesha_only: 'Carmax Waukesha',
   carmax_network: 'carmax',
   all_dealers: ''
 };
@@ -174,37 +175,54 @@ export function LiveInventory() {
 
   return (
     <div className="space-y-3">
-      {/* Dealer scope toggle */}
-      <div className="grid grid-cols-2 gap-2">
+      {/* Dealer scope toggle - 3 modes */}
+      <div className="grid grid-cols-3 gap-2">
         <button
-          onClick={() => setScope('carmax_network')}
+          onClick={() => setScope('waukesha_only')}
           className={cn(
-            'rounded-xl border px-4 py-3 text-sm font-bold transition-all',
-            scope === 'carmax_network'
+            'rounded-xl border px-2.5 py-3 text-xs font-bold transition-all sm:px-3 sm:text-sm',
+            scope === 'waukesha_only'
               ? 'border-success bg-success/15 text-success'
               : 'border-border bg-surface text-text-dim hover:border-success/40'
           )}
         >
-          🎯 CarMax Network
-          <div className="mt-0.5 text-[10px] font-normal text-text-faint">Waukesha + transferable</div>
+          🏠 Waukesha Only
+          <div className="mt-0.5 text-[9px] font-normal text-text-faint sm:text-[10px]">In stock at your store</div>
+        </button>
+        <button
+          onClick={() => setScope('carmax_network')}
+          className={cn(
+            'rounded-xl border px-2.5 py-3 text-xs font-bold transition-all sm:px-3 sm:text-sm',
+            scope === 'carmax_network'
+              ? 'border-accent-2 bg-accent-2/15 text-accent-2'
+              : 'border-border bg-surface text-text-dim hover:border-accent-2/40'
+          )}
+        >
+          🚚 + Transferable
+          <div className="mt-0.5 text-[9px] font-normal text-text-faint sm:text-[10px]">Any CarMax store</div>
         </button>
         <button
           onClick={() => setScope('all_dealers')}
           className={cn(
-            'rounded-xl border px-4 py-3 text-sm font-bold transition-all',
+            'rounded-xl border px-2.5 py-3 text-xs font-bold transition-all sm:px-3 sm:text-sm',
             scope === 'all_dealers'
               ? 'border-accent bg-accent/15 text-accent'
               : 'border-border bg-surface text-text-dim hover:border-accent/40'
           )}
         >
           🏢 All Dealers
-          <div className="mt-0.5 text-[10px] font-normal text-text-faint">CarMax + franchise</div>
+          <div className="mt-0.5 text-[9px] font-normal text-text-faint sm:text-[10px]">CarMax + franchise</div>
         </button>
       </div>
 
-      {scope === 'carmax_network' && (
+      {scope === 'waukesha_only' && (
         <div className="rounded-md border border-success/30 bg-success/5 px-3 py-2 text-[11px] text-success/90">
-          🏠 <strong>WAUKESHA</strong> badge = at your store, ready to test drive · 🚚 <strong>TRANSFER</strong> badge = at another CarMax, free transfer to Waukesha (typical 5-7 days)
+          📍 Showing only what&apos;s currently at <strong>CarMax Waukesha</strong>. Empty sections = not in stock there. Switch to &ldquo;+ Transferable&rdquo; to see what they can transfer in 5-7 days.
+        </div>
+      )}
+      {scope === 'carmax_network' && (
+        <div className="rounded-md border border-accent-2/30 bg-accent-2/5 px-3 py-2 text-[11px] text-accent-2">
+          🏠 <strong>WAUKESHA</strong> badge = at your store · 🚚 <strong>TRANSFER</strong> badge = at another CarMax, free transfer to Waukesha (5-7 days typical)
         </div>
       )}
 
@@ -273,7 +291,8 @@ export function LiveInventory() {
         <div className="text-xs text-text-faint">
           {(() => {
             const scopeLabel =
-              scope === 'carmax_network' ? 'CarMax Waukesha + transferable'
+              scope === 'waukesha_only' ? 'CarMax Waukesha only'
+              : scope === 'carmax_network' ? 'Waukesha + transferable CarMax'
               : 'All dealers';
             if (active === 'all') {
               return `📡 Showing top 4 per model · ${scopeLabel} · ${radius}mi from ${zip}`;
