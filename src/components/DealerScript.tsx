@@ -1,8 +1,61 @@
-import { SCRIPT_OPENING, DEALER_DECODER, QUESTIONS_TO_ASK } from '@/lib/data';
+import { SCRIPT_OPENING, DEALER_DECODER, QUESTIONS_TO_ASK, DEFENSIVE_ANSWERS, MONTHLY_PAYMENT_PLAYBOOK } from '@/lib/data';
 
 export function DealerScript() {
   return (
     <div className="space-y-10">
+      <SectionBlock
+        id="answers"
+        icon="🛡️"
+        title="When THEY Ask YOU Stuff"
+        intro="The trickiest moments aren't when they're pitching — they're when they ask you a question that seems innocent. Here's how to answer the common ones without giving up leverage."
+      >
+        {/* Monthly payment philosophy box */}
+        <div className="mb-4 overflow-hidden rounded-xl border border-accent/40 bg-gradient-to-br from-accent/10 to-accent-2/5">
+          <div className="border-b border-accent/30 bg-accent/10 px-4 py-3">
+            <div className="text-[10px] font-bold uppercase tracking-widest text-accent-2">⚠️ The Monthly Payment Paradox</div>
+            <h3 className="mt-1 text-sm font-bold leading-snug sm:text-base">{MONTHLY_PAYMENT_PLAYBOOK.headline}</h3>
+          </div>
+          <div className="space-y-3 px-4 py-3">
+            <p className="text-sm text-text sm:text-base">{MONTHLY_PAYMENT_PLAYBOOK.insight}</p>
+            <ul className="space-y-1.5">
+              {MONTHLY_PAYMENT_PLAYBOOK.rules.map((rule, i) => (
+                <li key={i} className="flex gap-2 text-sm">
+                  <span className="shrink-0 font-bold text-accent-2">{i + 1}.</span>
+                  <span className="text-text-dim">{rule}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        <div className="space-y-3">
+          {DEFENSIVE_ANSWERS.map((q, i) => (
+            <article key={i} className="overflow-hidden rounded-xl border border-border bg-surface">
+              <header className="flex items-start gap-2 border-b border-border bg-surface-2 px-4 py-3">
+                <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-warning/20 text-[11px] font-bold text-warning">
+                  {i + 1}
+                </span>
+                <p className="text-sm font-semibold italic text-text sm:text-base">{q.theyAsk}</p>
+              </header>
+              <div className="px-4 py-2.5 text-xs text-text-dim sm:text-sm">
+                <span className="font-bold text-warning">Why they ask:</span> {q.whyTheyAsk}
+              </div>
+              <div className="border-t border-border/50 bg-danger/5 px-4 py-2 text-xs sm:text-sm">
+                <span className="font-bold text-danger">Don&apos;t reveal:</span> <span className="text-text-dim">{q.dontReveal}</span>
+              </div>
+              <div className="border-l-4 border-l-success bg-success/5 px-4 py-3">
+                <div className="text-[10px] font-bold uppercase tracking-widest text-success">Smart reply</div>
+                <p className="mt-1 text-sm font-semibold text-text sm:text-base">&ldquo;{q.smartReply}&rdquo;</p>
+              </div>
+              <div className="border-l-4 border-l-accent bg-accent/5 px-4 py-3">
+                <div className="text-[10px] font-bold uppercase tracking-widest text-accent">If they push harder</div>
+                <p className="mt-1 text-sm text-text sm:text-base">&ldquo;{q.ifPushed}&rdquo;</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </SectionBlock>
+
       <SectionBlock
         id="opening"
         icon="🗣️"

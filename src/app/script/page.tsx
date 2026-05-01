@@ -13,6 +13,7 @@ export default function ScriptPage() {
         </p>
         <nav className="mt-4 flex flex-wrap gap-2 text-xs sm:text-sm">
           {[
+            { href: '#answers', label: '🛡️ When They Ask You' },
             { href: '#opening', label: '🗣️ Opening Lines' },
             { href: '#decoder', label: '🎭 Decoder' },
             { href: '#ask', label: '❓ Your Questions' }

@@ -997,6 +997,84 @@ export const DEALER_DECODER = [
   }
 ];
 
+export const MONTHLY_PAYMENT_PLAYBOOK = {
+  headline: "Yes, you DO care about monthly payment. Here's how to honor that without losing leverage.",
+  insight: "Monthly payment is the OUTPUT of three numbers: OTD price, APR, and loan term. If you tell the dealer your max monthly, they control all three inputs and engineer the worst possible deal that still hits your number (longer term, higher APR, packed add-ons). Instead: control the INPUTS yourself, then calculate the monthly to verify it fits.",
+  rules: [
+    "Know your monthly cap privately ($500). Don't volunteer it.",
+    "Negotiate on OTD price first. APR second. Term third.",
+    "Calculate the monthly YOURSELF using their numbers — never accept their monthly figure on faith.",
+    "If their monthly is too high, the answer is 'lower the price' or 'better APR' — never 'longer loan term'.",
+    "If they ask your monthly cap directly, see the script in the next section."
+  ]
+};
+
+export const DEFENSIVE_ANSWERS = [
+  {
+    theyAsk: '"What monthly payment are you looking for?"',
+    whyTheyAsk: 'They want to engineer a loan that hits your number — but on THEIR terms. Longer loan, higher APR, hidden fees rolled into the payment.',
+    dontReveal: 'Your actual $500 monthly cap.',
+    smartReply: "I'm focused on total OTD price, not monthly. I'll do the monthly math myself once I see your best price and APR.",
+    ifPushed: "Honest answer? I want a payment that comes from a fair price and a reasonable APR. Not from a stretched 84-month loan that buries me. So show me the OTD and the APR, and I'll tell you if the monthly works."
+  },
+  {
+    theyAsk: '"What\'s your price range?"',
+    whyTheyAsk: "Whatever number you say, they'll show you cars near the TOP of that range. If you say $30k, you won't see anything under $28k.",
+    dontReveal: 'Your actual $30k ceiling.',
+    smartReply: "I'm looking in the low-to-mid twenties for the right SUV.",
+    ifPushed: "Show me what you have under $25k first. I'll go up if I see something worth it."
+  },
+  {
+    theyAsk: '"What APR have you been approved for?"',
+    whyTheyAsk: 'They want to beat your pre-approval by 0.25% to win the financing — even if their underlying terms are worse. Or they want to know how badly they can mark up.',
+    dontReveal: 'Your exact pre-approval APR.',
+    smartReply: "I have a competitive pre-approval lined up. What's your best APR for someone in my situation?",
+    ifPushed: "Quote me your APR first. If it beats what I have, I'll consider it. If not, I'm using my own financing."
+  },
+  {
+    theyAsk: '"What do you think your trade is worth?"',
+    whyTheyAsk: 'Trade-in negotiation gets blended with car price negotiation = chaos = profit for them. Also, your guess sets the ceiling.',
+    dontReveal: 'Any number — even your KBB guess.',
+    smartReply: "I haven't decided whether I'm trading. Let's settle the price on this car first, then we can talk trade separately.",
+    ifPushed: "Appraise it without me anchoring you. Show me your offer in writing, and I'll compare it to selling private."
+  },
+  {
+    theyAsk: '"How much are you putting down?"',
+    whyTheyAsk: 'Your down payment reveals your liquidity and your max budget. They use it to size up the rest of the deal.',
+    dontReveal: 'Your full $3-5k available.',
+    smartReply: "Depends on the deal. Let's settle the price first, then I'll decide what makes sense for down payment.",
+    ifPushed: "I'd like to put as little down as possible — depends on whether the financing terms make that worthwhile."
+  },
+  {
+    theyAsk: '"When do you need a car by?"',
+    whyTheyAsk: 'Urgency = leverage. If you need it this weekend, they have you over a barrel.',
+    dontReveal: 'Any actual deadline.',
+    smartReply: "Whenever I find the right car at the right price. Could be this week, could be next month.",
+    ifPushed: "I'm not on a clock. The deal has to be right or I'll keep looking."
+  },
+  {
+    theyAsk: '"Are you ready to buy today if the price is right?"',
+    whyTheyAsk: 'Classic close. Once you say yes, the entire conversation becomes about overcoming objections, not finding a fair deal.',
+    dontReveal: 'That you\'re emotionally ready.',
+    smartReply: "I never buy on the same day I shop. I always sleep on it. So no, but I might tomorrow if your offer is the best one.",
+    ifPushed: "I told you — I sleep on every major purchase. If that\'s a problem, I\'ll go to the next dealer."
+  },
+  {
+    theyAsk: '"What other dealers have you visited?"',
+    whyTheyAsk: 'They want to know who they\'re competing with so they can position against them — or undercut by just enough.',
+    dontReveal: 'Specific competing offers.',
+    smartReply: "I'm shopping a few places — give me your best out-the-door price and I\'ll compare.",
+    ifPushed: "Bring me your best offer. If it beats what I\'ve seen, you win the sale. If not, you don\'t."
+  },
+  {
+    theyAsk: '"Have you been pre-approved for financing?"',
+    whyTheyAsk: 'If yes, they have to compete with that rate. If no, they have wide latitude to mark up dealer financing.',
+    dontReveal: 'Whether you DON\'T have pre-approval (if true).',
+    smartReply: "Yes, I have pre-approval. What\'s your best APR offer?",
+    ifPushed: "I'd rather not share the exact rate. Just give me your best, and I\'ll compare."
+  }
+];
+
 export const QUESTIONS_TO_ASK = [
   {
     category: '💰 Price (FIRST — before anything else)',
