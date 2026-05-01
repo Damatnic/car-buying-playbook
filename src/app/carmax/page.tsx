@@ -9,6 +9,7 @@ import {
 import { cn } from '@/lib/utils';
 import { LotFinds } from '@/components/LotFinds';
 import { TierList } from '@/components/TierList';
+import { LiveInventory } from '@/components/LiveInventory';
 
 const SEVERITY_STYLES = {
   WALK: 'bg-danger/15 text-danger border-danger/40',
@@ -48,6 +49,18 @@ export default function CarMaxPage() {
             Store page ↗
           </a>
         </div>
+      </section>
+
+      {/* LIVE INVENTORY - the headline feature */}
+      <section className="mt-8">
+        <h2 className="mb-2 flex items-center gap-2 text-xl font-bold tracking-tight sm:text-2xl">
+          <span className="h-6 w-1 rounded bg-gradient" />
+          📡 Live Inventory Near You
+        </h2>
+        <p className="mb-4 text-sm text-text-dim sm:text-base">
+          Real listings from CarMax, dealer lots, and private sellers within 50 miles of 53186 — pulled live from the MarketCheck inventory database. Tap a card to view the full listing or add it to your finds with one click.
+        </p>
+        <LiveInventory />
       </section>
 
       {/* Tier List - which cars to focus on */}
