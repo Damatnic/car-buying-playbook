@@ -84,6 +84,31 @@ export function PaymentCalculator({
             min={4} max={24} step={0.5}
             onChange={setApr}
           />
+          <div className="-mt-2 flex flex-wrap gap-1">
+            {[
+              { v: 7, l: '7%', c: 'success' },
+              { v: 11, l: '11%', c: 'success' },
+              { v: 14, l: '14%', c: 'warning' },
+              { v: 17, l: '17%', c: 'warning' },
+              { v: 21, l: '21%', c: 'danger' }
+            ].map(p => (
+              <button
+                key={p.v}
+                onClick={() => setApr(p.v)}
+                className={cn(
+                  'rounded-full border px-2 py-0.5 text-[10px] font-semibold transition-all',
+                  apr === p.v
+                    ? p.c === 'success' ? 'border-success bg-success/15 text-success' :
+                      p.c === 'warning' ? 'border-warning bg-warning/15 text-warning' :
+                      'border-danger bg-danger/15 text-danger'
+                    : 'border-border bg-surface-2 text-text-faint hover:border-accent hover:text-text'
+                )}
+              >
+                {p.l}
+              </button>
+            ))}
+            <span className="self-center text-[10px] text-text-faint">← presets</span>
+          </div>
           <div>
             <label className="mb-2 block text-sm">Loan Term</label>
             <div className="grid grid-cols-4 gap-2">
