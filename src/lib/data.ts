@@ -1139,6 +1139,198 @@ export const SHOPPING_DAY_BRING = [
   'Snacks, water — long stops at dealers'
 ];
 
+export const CARMAX_BROOKFIELD = {
+  name: 'CarMax Brookfield',
+  address: '19115 W Bluemound Rd, Brookfield, WI 53045',
+  phone: '+12625446620',
+  phoneDisplay: '(262) 544-6620',
+  storeId: '7102',
+  driveTime: '~10 min from Waukesha',
+  hours: 'Verify by phone — typical: Mon-Sat 10am-9pm, Sun 11am-7pm',
+  mapsUrl: 'https://www.google.com/maps/search/?api=1&query=CarMax+Brookfield+WI',
+  storeUrl: 'https://www.carmax.com/stores/7102'
+};
+
+export const CARMAX_SEARCH_LINKS = [
+  {
+    label: 'All compact SUVs at Brookfield',
+    description: 'Toyota RAV4, Honda CR-V, Subaru Forester, Mazda CX-5, Kia Sportage, Hyundai Tucson, Nissan Rogue — under $28k',
+    url: 'https://www.carmax.com/cars/suvs?stores=7102&priceMax=28000&year=2022-2024'
+  },
+  {
+    label: 'Toyota RAV4 only',
+    description: 'King of reliability — under $28k, 2022+',
+    url: 'https://www.carmax.com/cars/toyota/rav4?stores=7102&priceMax=28000&year=2022-2024'
+  },
+  {
+    label: 'Subaru Forester only',
+    description: 'Standard AWD — best for WI winters — under $28k, 2022+',
+    url: 'https://www.carmax.com/cars/subaru/forester?stores=7102&priceMax=28000&year=2022-2024'
+  },
+  {
+    label: 'Honda CR-V only',
+    description: 'Massive cargo — under $28k, 2022+',
+    url: 'https://www.carmax.com/cars/honda/cr-v?stores=7102&priceMax=28000&year=2022-2024'
+  },
+  {
+    label: 'Mazda CX-5 only',
+    description: 'Premium feel for the price — under $28k, 2022+',
+    url: 'https://www.carmax.com/cars/mazda/cx-5?stores=7102&priceMax=28000&year=2022-2024'
+  },
+  {
+    label: 'Kia Sportage only',
+    description: 'Big upgrade in 2023 — under $28k, 2022+',
+    url: 'https://www.carmax.com/cars/kia/sportage?stores=7102&priceMax=28000&year=2022-2024'
+  },
+  {
+    label: 'Hyundai Tucson only',
+    description: 'Same chassis as Sportage — under $28k, 2022+',
+    url: 'https://www.carmax.com/cars/hyundai/tucson?stores=7102&priceMax=28000&year=2022-2024'
+  },
+  {
+    label: 'Nissan Rogue only',
+    description: 'Comfortable + good MPG — under $28k, 2022+',
+    url: 'https://www.carmax.com/cars/nissan/rogue?stores=7102&priceMax=28000&year=2022-2024'
+  }
+];
+
+export const CARMAX_TACTICS = {
+  pricing: {
+    title: 'How CarMax pricing actually works',
+    items: [
+      'No-haggle on the car price. Period. Walking out won\'t make them lower it.',
+      'BUT: you CAN negotiate your trade-in offer. Push back on it.',
+      'BUT: you CAN choose your own financing (use your pre-approval).',
+      'BUT: you CAN decline EVERY F&I add-on (MaxCare, GAP, etc).',
+      'If you find the SAME car cheaper at another CarMax within 100mi, they may transfer it for free.'
+    ]
+  },
+  upsells: {
+    title: 'What they will push hard (decline these)',
+    items: [
+      'MaxCare extended warranty — $1500-3500. Almost never worth it on reliable Toyota/Honda/Subaru.',
+      'GAP coverage — $400-800 from CarMax. Get it from Geico/Progressive for $40-60/yr.',
+      'Tire & wheel protection — usually $400-600. Skip.',
+      'Paint/interior protection — $400+. Definitely skip.',
+      'Their financing — only beat your pre-approval if their APR is genuinely better. Compare in writing.'
+    ]
+  },
+  advantages: {
+    title: 'What CarMax does WELL (use these)',
+    items: [
+      '30-day / 1500-mile return policy. Genuine — actually use it if anything feels off.',
+      '90-day / 4000-mile limited warranty included with every car.',
+      'No high-pressure sales — staff is salaried, not commissioned.',
+      'Free Carfax / AutoCheck on every car. Ask for it before you test drive.',
+      'Soft credit pull for pre-approval (good if you didn\'t do Capital One yet).',
+      'You can hold a car for 7 days for $99 (refundable if you don\'t buy).'
+    ]
+  }
+};
+
+export const TEST_DRIVE_CHECKLIST = [
+  {
+    category: '🚪 Before you drive (sitting in the lot)',
+    items: [
+      'Sit in driver seat — can you see all gauges clearly? Is reach comfortable?',
+      'Adjust mirrors — are blind spots manageable for your height?',
+      'Climb into back seat — adult passenger comfortable behind your seat position?',
+      'Check cargo area — does your stroller / dog crate / weekly groceries fit?',
+      'Pair your phone via Bluetooth — does CarPlay/Android Auto connect quickly?',
+      'Check USB ports — front AND rear, do they all work?',
+      'Test all power windows, locks, sunroof if equipped',
+      'Look for warning lights on dash when key is on (engine NOT running yet)'
+    ]
+  },
+  {
+    category: '🛣️ Test drive — what to actually do',
+    items: [
+      'Start engine cold if possible — listen for any clatter, check for blue smoke',
+      'In parking lot: hard left + right turns at low speed (listen for clicking → CV joint issue)',
+      'Hard brake from 25mph — does it pull left/right? Pulsate? Squeal?',
+      'Highway merge — hit 65mph, hold steady. Does it shift smoothly? Wander in lane?',
+      'At 65mph, let go of wheel briefly — does car drift? (alignment issue)',
+      'Lift throttle suddenly at 65 — feel any weird shudder? (transmission issue)',
+      'On rough road — listen for clunks, rattles (suspension issue)',
+      'Try AC on max cold — does it actually get cold within 1-2 minutes?',
+      'Heat on max — same test. WI winter — verify it works.',
+      'Try every button: heated seats, defroster, wipers, washer fluid, headlights, hazards'
+    ]
+  },
+  {
+    category: '🔍 After the drive (back in the lot)',
+    items: [
+      'Pop the hood. Look for: clean engine bay, no leaks, oil cap clean (not milky/sludgy)',
+      'Check coolant overflow level — should be in the marked range',
+      'Walk around exterior — look at panel gaps, do they all line up?',
+      'Look for paint mismatches between panels (accident repair clue)',
+      'Tire tread — stick a penny in upside down. If you see top of Lincoln\'s head, tires need replacing',
+      'Check tire wear pattern — should be even across, not bald on edges',
+      'Look under car for fresh fluid drips on the ground beneath',
+      'Smell the interior — musty smell = past water damage. Cigarette = previous smoker.',
+      'Open every door — do they latch firmly? Squeak on hinges?'
+    ]
+  }
+];
+
+export const CARFAX_RED_FLAGS = [
+  {
+    flag: 'Salvage / Rebuilt / Junk title',
+    severity: 'WALK',
+    why: 'Car was totaled by an insurance company. Even rebuilt, value is 30-40% lower forever and insurance is harder.'
+  },
+  {
+    flag: 'Flood / Water damage',
+    severity: 'WALK',
+    why: 'Electrical issues will haunt the car forever. Mold can be hidden in carpets and seats.'
+  },
+  {
+    flag: 'Lemon law buyback',
+    severity: 'WALK',
+    why: 'The manufacturer bought it back because it had a problem they couldn\'t fix.'
+  },
+  {
+    flag: 'Frame damage / structural',
+    severity: 'WALK',
+    why: 'Even repaired, alignment will never be perfect. Crash safety is compromised.'
+  },
+  {
+    flag: 'Odometer rollback alert',
+    severity: 'WALK',
+    why: 'Federal crime. Whatever else they hid is probably worse.'
+  },
+  {
+    flag: '5+ owners in 5 years',
+    severity: 'INVESTIGATE',
+    why: 'Someone was trying to dump this car. Find out why.'
+  },
+  {
+    flag: 'Fleet / rental history',
+    severity: 'INVESTIGATE',
+    why: 'Often hard miles + lots of drivers, but not always a dealbreaker. Check service records.'
+  },
+  {
+    flag: 'Accident reported (any severity)',
+    severity: 'INVESTIGATE',
+    why: 'Ask for repair details. Minor bumper ding = OK. Anything structural = walk. Get an independent inspection.'
+  },
+  {
+    flag: 'Service gap >12 months',
+    severity: 'INVESTIGATE',
+    why: 'Maintenance was likely skipped. Could mean major work coming due. Ask about timing belt, transmission service, brakes.'
+  },
+  {
+    flag: 'Open recall not addressed',
+    severity: 'NEGOTIATE',
+    why: 'Make CarMax fix it before you take delivery — they should anyway, but verify.'
+  },
+  {
+    flag: 'Failed state safety inspection',
+    severity: 'INVESTIGATE',
+    why: 'What was the failure? If it\'s already been fixed, fine. If not, it\'s on YOU after purchase.'
+  }
+];
+
 export const TRAPS = [
   { title: '"Buy here pay here" lots', body: 'APR runs 20-29%. Cars are usually garbage. Predatory by design — avoid entirely.' },
   { title: 'Loans 84+ months', body: "Underwater for 4-5 years. Can't trade out. Pays thousands more in interest total." },

@@ -47,6 +47,24 @@ export default function Home() {
         </Callout>
       </Section>
 
+      <Section id="tonight" title="🎯 Tonight: 4PM at CarMax">
+        <Link
+          href="/carmax"
+          className="block rounded-xl border-2 border-accent/50 bg-gradient-to-br from-accent/10 to-accent-2/5 p-5 transition-all hover:border-accent hover:shadow-lg hover:shadow-accent/20"
+        >
+          <div className="flex items-start justify-between gap-3">
+            <div className="min-w-0 flex-1">
+              <div className="text-xs font-bold uppercase tracking-widest text-accent-2">Open before you go →</div>
+              <h3 className="mt-1 text-lg font-extrabold sm:text-xl">CarMax Brookfield Game Plan</h3>
+              <p className="mt-1 text-sm text-text-dim sm:text-base">
+                Live inventory links · Test drive checklist · Carfax red flags · CarMax-specific tactics · What to bring
+              </p>
+            </div>
+            <span className="shrink-0 text-2xl text-accent">→</span>
+          </div>
+        </Link>
+      </Section>
+
       <Section id="picks" title="🏆 Top Picks" intro="Best matches for your situation: real cargo room, reliable, fits the math.">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {topPicks.map(v => <VehicleCard key={v.id} vehicle={v} />)}
