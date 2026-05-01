@@ -67,7 +67,7 @@ type CellState = InventoryResponse | { error: string } | 'loading' | undefined;
 export function LiveInventory() {
   const [active, setActive] = useState<ActiveModel>('all');
   const [zip, setZip] = useState('53186');
-  const [radius, setRadius] = useState(150);
+  const [radius, setRadius] = useState(100);
   const [maxPrice, setMaxPrice] = useState(30000);
   const [scope, setScope] = useState<DealerScope>('carmax_network');
   const [data, setData] = useState<Record<string, CellState>>({});
@@ -224,7 +224,7 @@ export function LiveInventory() {
               <span>Radius</span><span className="text-accent-2">{radius}mi</span>
             </label>
             <input
-              type="range" min={25} max={500} step={25} value={radius}
+              type="range" min={25} max={100} step={25} value={radius}
               onChange={e => setRadius(Number(e.target.value))} className="w-full"
             />
           </div>

@@ -109,7 +109,8 @@ export async function GET(req: NextRequest) {
   const make = clean(params, 'make', '');
   const model = clean(params, 'model', '');
   const zip = clean(params, 'zip', '53186').replace(/\D/g, '').slice(0, 5);
-  const radius = Math.min(200, Math.max(10, Number(clean(params, 'radius', '50'))));
+  // MarketCheck free-tier caps at 100mi
+  const radius = Math.min(100, Math.max(10, Number(clean(params, 'radius', '50'))));
   const maxPrice = Math.min(60000, Math.max(5000, Number(clean(params, 'maxPrice', '28000'))));
   const minYear = Math.min(2026, Math.max(2010, Number(clean(params, 'minYear', '2022'))));
   const dealerFilter = clean(params, 'dealerFilter', '');
