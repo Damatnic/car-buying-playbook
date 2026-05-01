@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { Section, Callout } from '@/components/Section';
 import { DealerStops } from '@/components/DealerStops';
 import { ShoppingPlan } from '@/components/ShoppingPlan';
@@ -11,8 +12,14 @@ export default function ShoppingPage() {
           <span className="gradient-text">Shopping Day Plan</span>
         </h1>
         <p className="mt-2 text-sm text-text-dim sm:text-base">
-          A real itinerary for tomorrow, the dealers worth visiting near Waukesha, and a quick-reference tips card you can pull up at the lot.
+          A real itinerary for today, the dealers worth visiting near Waukesha, and a quick-reference tips card you can pull up at the lot.
         </p>
+        <Link
+          href="/script"
+          className="mt-3 inline-flex items-center gap-2 rounded-lg border border-accent/40 bg-accent/10 px-3 py-2 text-sm font-semibold text-accent hover:bg-accent/15"
+        >
+          🎭 Open the Dealer Script (what to say + their lines decoded) →
+        </Link>
       </header>
 
       <Section title="🗓️ Suggested Itinerary" intro="A full day designed to give you actual leverage. Don't try to do every dealer — better to nail 2-3 well than rush through 6.">

@@ -8,6 +8,7 @@ const links = [
   { href: '/', label: 'Playbook' },
   { href: '/vehicles', label: 'Vehicles' },
   { href: '/shopping', label: 'Shopping Day' },
+  { href: '/script', label: 'Dealer Script' },
   { href: '/compare', label: 'Compare' },
   { href: '/checklist', label: 'Checklist' },
   { href: '/traps', label: 'Traps' },

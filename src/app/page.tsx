@@ -65,9 +65,9 @@ export default function Home() {
       <Section title="🔗 Next Steps">
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {[
-            { href: '/shopping', icon: '🗓️', title: 'Shopping Day Plan', body: 'Tomorrow\'s itinerary + dealer list + tips card' },
+            { href: '/shopping', icon: '🗓️', title: 'Shopping Day Plan', body: 'Today\'s itinerary + dealer list + tips card' },
+            { href: '/script', icon: '🎭', title: 'Dealer Script', body: 'What to say, their lines decoded, your replies' },
             { href: '/vehicles', icon: '🚙', title: 'Browse Vehicles', body: 'Photos, features, full specs for all 8 picks' },
-            { href: '/compare', icon: '⚖️', title: 'Compare Saved', body: 'Side-by-side feature matrix' },
             { href: '/checklist', icon: '📋', title: 'Buying Checklist', body: '4-week persistent strategy' }
           ].map(card => (
             <Link

@@ -871,6 +871,186 @@ export const QUICK_TIPS = {
   }
 };
 
+export const SCRIPT_OPENING = [
+  {
+    situation: 'Walking in the door',
+    say: "Hi, I'm just looking today. I'd like to see your [model] inventory.",
+    why: 'Sets the tone: you\'re browsing, not desperate. "Just looking" is the universal "back off a bit" signal.'
+  },
+  {
+    situation: 'Salesperson asks why you\'re here',
+    say: "I'm doing research before I buy. Not buying today.",
+    why: 'Removes urgency. They know they have to earn the visit, not pressure-close.'
+  },
+  {
+    situation: 'They ask for your name/number/email',
+    say: "I'd rather just look around first. I'll let you know if I have questions.",
+    why: 'Their CRM follow-up calls are relentless. Don\'t hand over contact info until you\'re seriously interested.'
+  },
+  {
+    situation: 'Ready to test drive',
+    say: 'Can I take it on a 30-minute test drive — highway plus city?',
+    why: '5-minute parking-lot drives hide everything. You need real conditions to catch suspension noise, transmission shifts, road noise.'
+  },
+  {
+    situation: 'They want to "run your credit" first',
+    say: 'I have my own pre-approval through [your bank/CU/Capital One]. Just give me the cash price.',
+    why: 'Hard pulls drop your score 5-10 points each. Multiple dealers = multiple drops. Use your pre-approval as a shield.'
+  },
+  {
+    situation: 'They ask about your trade-in',
+    say: "I haven't decided whether I'm trading. What\'s the OTD price without a trade?",
+    why: 'Trade-in negotiation gets mixed with car price = confusion = profit for them. Negotiate price first, trade second, separately.'
+  },
+  {
+    situation: 'They ask about your max monthly payment',
+    say: "I'm focused on the total out-the-door price, not monthly. What\'s the OTD?",
+    why: 'Monthly-payment shopping is how they extend you to 84 months and bury you in interest.'
+  },
+  {
+    situation: 'They pressure you to buy today',
+    say: "I never buy on the same day I shop. I'll think it over and call you tomorrow.",
+    why: 'Anyone refusing to wait 24 hours is hiding something. Real deals survive a night of sleep.'
+  },
+  {
+    situation: 'Leaving without buying',
+    say: 'Thanks for your time. Can you email me the OTD price for that car?',
+    why: 'Forces them to commit a number in writing. Now you have leverage to shop it elsewhere.'
+  }
+];
+
+export const DEALER_DECODER = [
+  {
+    theySay: '"What monthly payment are you looking for?"',
+    meaning: "I'll stretch the loan term to whatever fits, then bury fees in there.",
+    youReply: 'I\'m focused on total price, not monthly. What\'s the out-the-door?'
+  },
+  {
+    theySay: '"Let me check with my manager."',
+    meaning: 'Theater. Often they\'re just waiting in the back for you to soften. Sometimes the "manager" is real, but the back-and-forth is designed to wear you down.',
+    youReply: 'Take your time. I\'ll be here.' + ' (Then sit silently. Don\'t fill the silence.)'
+  },
+  {
+    theySay: '"This price is only good today."',
+    meaning: "I'm trying to remove your ability to sleep on it. Real deals don\'t expire in 4 hours.",
+    youReply: 'Then it\'s not the right deal for me. Have a good day.'
+  },
+  {
+    theySay: '"We have other people interested in this car."',
+    meaning: '90% of the time, fake. Designed to create FOMO.',
+    youReply: 'Then they should buy it. I\'ll find another one.'
+  },
+  {
+    theySay: '"What did you have in mind for a price?"',
+    meaning: 'Trying to anchor you on a number first so they can negotiate up.',
+    youReply: 'What\'s your best out-the-door price including all fees?'
+  },
+  {
+    theySay: '"Let\'s just see if we can get you approved."',
+    meaning: 'Hard credit pull is about to happen. Each one drops your score 5-10 points.',
+    youReply: 'Not until I have a written OTD price. I have my own pre-approval.'
+  },
+  {
+    theySay: '"I can\'t go any lower than that."',
+    meaning: 'Almost always a test. They\'ll go lower if you walk or push.',
+    youReply: 'Okay. Thanks for your time.' + ' (Stand up. Move to leave. Watch the price drop.)'
+  },
+  {
+    theySay: '"We\'ll match any competitor\'s price."',
+    meaning: 'Make YOU do the legwork shopping their competitors.',
+    youReply: 'Here\'s the OTD email from [other dealer] — beat it.'
+  },
+  {
+    theySay: '"Sign here, it\'s just a credit application."',
+    meaning: 'Often it\'s actually a contract or authorization for a hard pull. Read every line.',
+    youReply: 'Hold on, let me read this completely before signing.'
+  },
+  {
+    theySay: '"What needs to happen for you to drive home in this today?"',
+    meaning: 'Classic close. Trying to get you to verbalize commitment.',
+    youReply: 'Nothing today. I\'m sleeping on it before I make any decision.'
+  },
+  {
+    theySay: '"It\'s a non-refundable deposit to hold the car."',
+    meaning: 'Locks you in psychologically and financially. Once you put money down, you\'re much less likely to walk.',
+    youReply: 'I don\'t put deposits down. If the car sells, I\'ll find another one.'
+  },
+  {
+    theySay: '"That fee is non-negotiable / required by the state."',
+    meaning: 'Doc fees, dealer prep fees, "advertising" fees — almost all are pure profit. Some ARE negotiable, some can be waived.',
+    youReply: 'Show me the state requirement in writing. Otherwise, take it off.'
+  },
+  {
+    theySay: '"Why don\'t we get you approved first, then we\'ll talk price."',
+    meaning: 'They want commitment energy from you BEFORE you know the price.',
+    youReply: 'Price first, financing second. That\'s how I shop.'
+  },
+  {
+    theySay: '"You\'re going to need GAP / extended warranty / paint protection."',
+    meaning: 'F&I office upsell. These are huge profit centers. You probably don\'t need most of them.',
+    youReply: 'No thanks. I\'ll get GAP from my insurance for $40/year, and the manufacturer warranty covers me.'
+  },
+  {
+    theySay: '"The financing fell through. We need you to come back in."',
+    meaning: '"Spot delivery" or "yo-yo financing" scam. They sent you home with a car, now want to renegotiate at worse terms.',
+    youReply: 'Bring me the car. I\'m returning it and the deal is off.'
+  }
+];
+
+export const QUESTIONS_TO_ASK = [
+  {
+    category: '💰 Price (FIRST — before anything else)',
+    items: [
+      "What's the OTD price including tax, title, registration, doc fees, AND every other fee?",
+      'Can you put that OTD price in writing or email?',
+      'What add-ons are included in that price that I can decline?',
+      'What\'s your dealer doc fee specifically? Is any portion negotiable?',
+      'If I pay cash, is there a different price?'
+    ]
+  },
+  {
+    category: '🚗 The car itself (used/CPO)',
+    items: [
+      'Can I see the Carfax or AutoCheck report?',
+      'Has it been in any accidents, even minor ones?',
+      'Why was the previous owner trading it in?',
+      'What does the CPO warranty cover — exactly which parts and for how long?',
+      'Can I have it inspected by my own mechanic before I sign?',
+      'What service records do you have for it?'
+    ]
+  },
+  {
+    category: '🚗 The car itself (new)',
+    items: [
+      'Can I see the Monroney sticker (window sticker)?',
+      'What\'s the build date / how long has it been on the lot?',
+      'Are there any current factory rebates or incentives?',
+      'Does the manufacturer have any subprime financing programs running?',
+      'What\'s included in the delivery prep — and is the prep fee waivable?'
+    ]
+  },
+  {
+    category: '🏦 Financing (only AFTER you have an OTD price)',
+    items: [
+      'I have pre-approval through [bank]. What\'s your best APR for my situation?',
+      'Can you put that APR in writing before running my credit?',
+      'How many lenders will you submit my application to?',
+      'What\'s the difference in price if I use your financing vs my pre-approval?',
+      'If I use your financing, can I refinance after 6 months without penalty?'
+    ]
+  },
+  {
+    category: '📝 Before signing',
+    items: [
+      'Can I take the contract home to review overnight?',
+      'Walk me through every line item on this contract.',
+      'What is this fee for? (For each one — make them justify it.)',
+      'What happens if I cancel within 24 hours?',
+      'What\'s your return policy if something major comes up after I drive away?'
+    ]
+  }
+];
+
 export const SHOPPING_DAY_BRING = [
   "Driver's license",
   'Proof of insurance card',
