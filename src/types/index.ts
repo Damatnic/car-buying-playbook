@@ -64,3 +64,21 @@ export interface UserProfile {
   preApprovalApr?: number;
   monthlyBudget: number;
 }
+
+export interface LotFind {
+  id: string;
+  year: number;
+  make: string;
+  model: string;
+  trim?: string;
+  mileage?: number;
+  price: number;
+  awd?: boolean;
+  color?: string;
+  stockNumber?: string;
+  vehicleHistory?: 'clean' | 'accident' | 'unknown';
+  notes?: string;
+  thumbsUp?: boolean;
+  thumbsDown?: boolean;
+  createdAt: number;
+}

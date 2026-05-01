@@ -1139,6 +1139,167 @@ export const SHOPPING_DAY_BRING = [
   'Snacks, water — long stops at dealers'
 ];
 
+export type Tier = 'S' | 'A' | 'B' | 'C';
+
+export interface TierRow {
+  vehicleId: string;
+  name: string;
+  short: string;
+  reliability: Tier;
+  safety: Tier;
+  resale: Tier;
+  wiWinter: Tier;
+  tech: Tier;
+  interior: Tier;
+  costOfOwnership: Tier;
+  subprime: Tier;
+  overall: Tier;
+  oneliner: string;
+  proof: string;
+}
+
+export const TIER_RANKINGS: TierRow[] = [
+  {
+    vehicleId: 'rav4',
+    name: 'Toyota RAV4',
+    short: 'RAV4',
+    reliability: 'S',
+    safety: 'S',
+    resale: 'S',
+    wiWinter: 'A',
+    tech: 'A',
+    interior: 'A',
+    costOfOwnership: 'S',
+    subprime: 'A',
+    overall: 'S',
+    oneliner: 'The benchmark. Hard to make a wrong choice with one.',
+    proof: 'IIHS Top Safety Pick+ (2022-2024) · Consumer Reports #1 reliability in compact SUV class · 60%+ resale after 3 years'
+  },
+  {
+    vehicleId: 'crv',
+    name: 'Honda CR-V',
+    short: 'CR-V',
+    reliability: 'S',
+    safety: 'S',
+    resale: 'S',
+    wiWinter: 'A',
+    tech: 'A',
+    interior: 'S',
+    costOfOwnership: 'A',
+    subprime: 'A',
+    overall: 'S',
+    oneliner: 'Best interior in this class. Massive cargo room. Honda Sensing standard.',
+    proof: 'IIHS Top Safety Pick+ (2023+ redesign) · J.D. Power reliability award · 39 cu ft cargo (best in class)'
+  },
+  {
+    vehicleId: 'forester',
+    name: 'Subaru Forester',
+    short: 'Forester',
+    reliability: 'A',
+    safety: 'S',
+    resale: 'A',
+    wiWinter: 'S',
+    tech: 'B',
+    interior: 'B',
+    costOfOwnership: 'B',
+    subprime: 'A',
+    overall: 'S',
+    oneliner: 'WI winter king. Standard AWD, 8.7" ground clearance, EyeSight safety standard.',
+    proof: 'IIHS Top Safety Pick+ (2022-2024) · Standard symmetrical AWD · Best visibility in segment'
+  },
+  {
+    vehicleId: 'cx5',
+    name: 'Mazda CX-5',
+    short: 'CX-5',
+    reliability: 'A',
+    safety: 'S',
+    resale: 'A',
+    wiWinter: 'B',
+    tech: 'A',
+    interior: 'S',
+    costOfOwnership: 'B',
+    subprime: 'B',
+    overall: 'A',
+    oneliner: 'Premium feel for the money. Sportier drive than rivals. Smaller cargo.',
+    proof: 'IIHS Top Safety Pick+ (2022-2024) · Often cited as "best interior under $30k" · Smaller cargo than CR-V/RAV4'
+  },
+  {
+    vehicleId: 'sportage',
+    name: 'Kia Sportage',
+    short: 'Sportage',
+    reliability: 'B',
+    safety: 'A',
+    resale: 'B',
+    wiWinter: 'A',
+    tech: 'S',
+    interior: 'A',
+    costOfOwnership: 'B',
+    subprime: 'S',
+    overall: 'A',
+    oneliner: '2023 redesign was huge. 10yr/100k warranty is your safety net for subprime.',
+    proof: 'IIHS Top Safety Pick (not +) · 10yr/100k powertrain warranty · Kia Finance very subprime-friendly'
+  },
+  {
+    vehicleId: 'tucson',
+    name: 'Hyundai Tucson',
+    short: 'Tucson',
+    reliability: 'B',
+    safety: 'A',
+    resale: 'B',
+    wiWinter: 'A',
+    tech: 'S',
+    interior: 'A',
+    costOfOwnership: 'B',
+    subprime: 'S',
+    overall: 'A',
+    oneliner: 'Same chassis as Sportage. Sharper exterior. Same 10yr warranty safety net.',
+    proof: 'IIHS Top Safety Pick · 10yr/100k powertrain warranty · 38.7 cu ft cargo'
+  },
+  {
+    vehicleId: 'rogue',
+    name: 'Nissan Rogue',
+    short: 'Rogue',
+    reliability: 'B',
+    safety: 'S',
+    resale: 'C',
+    wiWinter: 'A',
+    tech: 'A',
+    interior: 'A',
+    costOfOwnership: 'B',
+    subprime: 'S',
+    overall: 'B',
+    oneliner: 'Comfortable + great MPG. Resale value is the weak spot. NMAC very subprime-friendly.',
+    proof: 'IIHS Top Safety Pick+ · 30/37 MPG (best in class) · Resale 40-45% after 3yrs (low)'
+  },
+  {
+    vehicleId: 'outlander',
+    name: 'Mitsubishi Outlander',
+    short: 'Outlander',
+    reliability: 'C',
+    safety: 'A',
+    resale: 'C',
+    wiWinter: 'A',
+    tech: 'A',
+    interior: 'A',
+    costOfOwnership: 'B',
+    subprime: 'S',
+    overall: 'B',
+    oneliner: '10yr warranty + optional 3rd row + heaviest incentives. Reliability question marks.',
+    proof: 'IIHS Top Safety Pick · 10yr/100k powertrain warranty · 7-passenger optional · Resale 35-40% after 3yrs'
+  }
+];
+
+export const TIER_CATEGORIES: Array<{ key: keyof Pick<TierRow, 'reliability' | 'safety' | 'resale' | 'wiWinter' | 'tech' | 'interior' | 'costOfOwnership' | 'subprime'>; label: string; short: string; icon: string }> = [
+  { key: 'reliability', label: 'Long-term Reliability', short: 'Reliability', icon: '🔧' },
+  { key: 'safety', label: 'Safety Ratings (IIHS/NHTSA)', short: 'Safety', icon: '🛡️' },
+  { key: 'resale', label: 'Resale Value (3yr retention)', short: 'Resale', icon: '💵' },
+  { key: 'wiWinter', label: 'Wisconsin Winter Capability', short: 'WI Winter', icon: '❄️' },
+  { key: 'tech', label: 'Tech & Infotainment', short: 'Tech', icon: '📱' },
+  { key: 'interior', label: 'Interior Quality / Comfort', short: 'Interior', icon: '🛋️' },
+  { key: 'costOfOwnership', label: 'Cost of Ownership (5yr)', short: 'Cost', icon: '⛽' },
+  { key: 'subprime', label: 'Subprime Financing Friendliness', short: 'Subprime', icon: '🏦' }
+];
+
 export const CARMAX_BROOKFIELD = {
   name: 'CarMax Brookfield',
   address: '19115 W Bluemound Rd, Brookfield, WI 53045',

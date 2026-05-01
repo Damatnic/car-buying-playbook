@@ -7,6 +7,8 @@ import {
   CARFAX_RED_FLAGS
 } from '@/lib/data';
 import { cn } from '@/lib/utils';
+import { LotFinds } from '@/components/LotFinds';
+import { TierList } from '@/components/TierList';
 
 const SEVERITY_STYLES = {
   WALK: 'bg-danger/15 text-danger border-danger/40',
@@ -48,14 +50,38 @@ export default function CarMaxPage() {
         </div>
       </section>
 
+      {/* Tier List - which cars to focus on */}
+      <section className="mt-8">
+        <h2 className="mb-2 flex items-center gap-2 text-xl font-bold tracking-tight sm:text-2xl">
+          <span className="h-6 w-1 rounded bg-gradient" />
+          🏆 Tier List — Which SUVs to Focus On
+        </h2>
+        <p className="mb-4 text-sm text-text-dim sm:text-base">
+          Ranked across 8 categories that matter for your situation. Look at S-tier cars first, A-tier as alternates, B/C only if the price is unbeatable.
+        </p>
+        <TierList />
+      </section>
+
+      {/* Lot Finds - the killer feature */}
+      <section className="mt-8">
+        <h2 className="mb-2 flex items-center gap-2 text-xl font-bold tracking-tight sm:text-2xl">
+          <span className="h-6 w-1 rounded bg-gradient" />
+          📋 Found at the Lot
+        </h2>
+        <p className="mb-4 text-sm text-text-dim sm:text-base">
+          Tap a car at the lot, type in price + year + mileage, see if it fits your budget instantly. Saves locally so you can compare 5-6 cars side-by-side without losing track.
+        </p>
+        <LotFinds />
+      </section>
+
       {/* Live inventory links */}
       <section className="mt-8">
         <h2 className="mb-2 flex items-center gap-2 text-xl font-bold tracking-tight sm:text-2xl">
           <span className="h-6 w-1 rounded bg-gradient" />
-          🔴 Live Inventory at Brookfield
+          🔴 Browse Inventory Online
         </h2>
         <p className="mb-4 text-sm text-text-dim sm:text-base">
-          Pre-filtered for compact SUVs, max $28k, 2022+ year. CarMax updates inventory in real-time. Open these on your phone before you drive over.
+          Pre-filtered CarMax search URLs (compact SUVs, max $28k, 2022+). Click these to see what&apos;s in stock at Brookfield right now — opens in your browser session so you see real-time inventory.
         </p>
         <div className="grid gap-2 sm:grid-cols-2">
           {CARMAX_SEARCH_LINKS.map(link => (

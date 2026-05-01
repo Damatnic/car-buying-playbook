@@ -1,10 +1,11 @@
-import type { SavedBuild, ChecklistState, UserProfile } from '@/types';
+import type { SavedBuild, ChecklistState, UserProfile, LotFind } from '@/types';
 
 const KEYS = {
   saved: 'cbp:savedBuilds',
   checklist: 'cbp:checklist',
   profile: 'cbp:profile',
-  saved_vehicles: 'cbp:savedVehicles'
+  saved_vehicles: 'cbp:savedVehicles',
+  lot_finds: 'cbp:lotFinds'
 } as const;
 
 const isClient = () => typeof window !== 'undefined';
@@ -92,12 +93,31 @@ export const storage = {
     writeJSON(KEYS.profile, profile);
   },
 
+  getLotFinds(): LotFind[] {
+    return readJSON<LotFind[]>(KEYS.lot_finds, []);
+  },
+  saveLotFind(find: LotFind): void {
+    const all = storage.getLotFinds();
+    const idx = all.findIndex(f => f.id === find.id);
+    if (idx >= 0) all[idx] = find;
+    else all.push(find);
+    writeJSON(KEYS.lot_finds, all);
+  },
+  deleteLotFind(id: string): void {
+    const all = storage.getLotFinds().filter(f => f.id !== id);
+    writeJSON(KEYS.lot_finds, all);
+  },
+  clearLotFinds(): void {
+    writeJSON(KEYS.lot_finds, []);
+  },
+
   exportAll(): string {
     return JSON.stringify({
       savedBuilds: storage.getSavedBuilds(),
       savedVehicles: storage.getSavedVehicles(),
       checklist: storage.getChecklist(),
-      profile: storage.getProfile()
+      profile: storage.getProfile(),
+      lotFinds: storage.getLotFinds()
     }, null, 2);
   },
   importAll(json: string): boolean {
@@ -107,6 +127,7 @@ export const storage = {
       if (data.savedVehicles) writeJSON(KEYS.saved_vehicles, data.savedVehicles);
       if (data.checklist) writeJSON(KEYS.checklist, data.checklist);
       if (data.profile) writeJSON(KEYS.profile, data.profile);
+      if (data.lotFinds) writeJSON(KEYS.lot_finds, data.lotFinds);
       return true;
     } catch {
       return false;
