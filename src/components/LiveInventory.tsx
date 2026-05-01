@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { storage } from '@/lib/storage';
 import type { LotFind } from '@/types';
 import { cn, fmtCurrency } from '@/lib/utils';
@@ -46,18 +46,22 @@ const MODELS = [
   { make: 'hyundai', model: 'tucson', label: 'Hyundai Tucson' },
   { make: 'nissan', model: 'rogue', label: 'Nissan Rogue' },
   { make: 'mitsubishi', model: 'outlander', label: 'Mitsubishi Outlander' }
-];
+] as const;
 
 type DealerScope = 'all' | 'carmax';
+type ActiveModel = 'all' | typeof MODELS[number]['model'];
+
+type CellState = InventoryResponse | { error: string } | 'loading' | undefined;
 
 export function LiveInventory() {
-  const [active, setActive] = useState(MODELS[0].model);
+  const [active, setActive] = useState<ActiveModel>('all');
   const [zip, setZip] = useState('53186');
   const [radius, setRadius] = useState(50);
   const [maxPrice, setMaxPrice] = useState(28000);
   const [scope, setScope] = useState<DealerScope>('all');
-  const [data, setData] = useState<Record<string, InventoryResponse | { error: string } | 'loading'>>({});
+  const [data, setData] = useState<Record<string, CellState>>({});
   const [savedVins, setSavedVins] = useState<Set<string>>(new Set());
+  const inflight = useRef<Set<string>>(new Set());
 
   const refreshSavedVins = useCallback(() => {
     const vins = storage.getLotFinds().map(f => f.stockNumber).filter(Boolean) as string[];
@@ -71,22 +75,25 @@ export function LiveInventory() {
     return () => window.removeEventListener('cbp:storage', handler);
   }, [refreshSavedVins]);
 
-  const cacheKey = (model: string) => `${model}|${scope}|${zip}|${radius}|${maxPrice}`;
+  const cacheKey = useCallback(
+    (model: string) => `${model}|${scope}|${zip}|${radius}|${maxPrice}`,
+    [scope, zip, radius, maxPrice]
+  );
 
-  const load = useCallback(async (model: string) => {
-    const m = MODELS.find(x => x.model === model);
-    if (!m) return;
-    const key = cacheKey(model);
+  const loadOne = useCallback(async (modelDef: typeof MODELS[number], rowsLimit: number) => {
+    const key = cacheKey(modelDef.model);
+    if (inflight.current.has(key)) return;
+    inflight.current.add(key);
     setData(prev => ({ ...prev, [key]: 'loading' }));
     try {
       const params = new URLSearchParams({
-        make: m.make,
-        model: m.model,
+        make: modelDef.make,
+        model: modelDef.model,
         zip,
         radius: String(radius),
         maxPrice: String(maxPrice),
         minYear: '2022',
-        rows: '15'
+        rows: String(rowsLimit)
       });
       if (scope === 'carmax') params.set('dealerFilter', 'carmax');
       const res = await fetch(`/api/inventory?${params}`);
@@ -99,15 +106,33 @@ export function LiveInventory() {
       setData(prev => ({ ...prev, [key]: json }));
     } catch (e) {
       setData(prev => ({ ...prev, [key]: { error: e instanceof Error ? e.message : 'fetch failed' } }));
+    } finally {
+      inflight.current.delete(key);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [zip, radius, maxPrice, scope]);
+  }, [cacheKey, zip, radius, maxPrice, scope]);
+
+  const loadAll = useCallback(async () => {
+    await Promise.all(MODELS.map(m => loadOne(m, 4)));
+  }, [loadOne]);
 
   useEffect(() => {
-    void load(active);
-  }, [active, load]);
+    if (active === 'all') {
+      void loadAll();
+    } else {
+      const m = MODELS.find(x => x.model === active);
+      if (m) void loadOne(m, 15);
+    }
+  }, [active, loadOne, loadAll]);
 
-  const refreshActive = () => { void load(active); };
+  const refreshActive = () => {
+    setData({});
+    inflight.current.clear();
+    if (active === 'all') void loadAll();
+    else {
+      const m = MODELS.find(x => x.model === active);
+      if (m) void loadOne(m, 15);
+    }
+  };
 
   const addToFinds = (l: Listing) => {
     const find: LotFind = {
@@ -128,10 +153,6 @@ export function LiveInventory() {
     storage.saveLotFind(find);
     refreshSavedVins();
   };
-
-  const current = data[cacheKey(active)];
-  const loading = current === 'loading';
-  const isError = current && typeof current === 'object' && 'error' in current;
 
   return (
     <div className="space-y-3">
@@ -195,8 +216,19 @@ export function LiveInventory() {
         </div>
       </div>
 
-      {/* Model tabs */}
+      {/* Model tabs - "All" is now first/default */}
       <div className="-mx-4 flex gap-1 overflow-x-auto px-4 no-scrollbar sm:mx-0 sm:px-0">
+        <button
+          onClick={() => setActive('all')}
+          className={cn(
+            'shrink-0 whitespace-nowrap rounded-lg border px-3 py-2 text-sm font-bold transition-all',
+            active === 'all'
+              ? 'border-accent bg-accent text-white'
+              : 'border-accent/40 bg-accent/10 text-accent hover:bg-accent/20'
+          )}
+        >
+          🌐 All Models
+        </button>
         {MODELS.map(m => (
           <button
             key={m.model}
@@ -213,56 +245,159 @@ export function LiveInventory() {
         ))}
       </div>
 
-      {/* Refresh + meta */}
       <div className="flex items-baseline justify-between">
         <div className="text-xs text-text-faint">
-          {loading && '⏳ Loading…'}
-          {!loading && current && typeof current === 'object' && 'count' in current && (
-            <>📡 Showing {current.count} of {current.totalAvailable.toLocaleString()} found · sorted by newest listings</>
-          )}
-          {isError && (
-            <span className="text-danger">Error: {(current as { error: string }).error}</span>
-          )}
+          {active === 'all'
+            ? `📡 Showing top 4 per model · ${scope === 'carmax' ? 'CarMax only' : 'all dealers'} · ${radius}mi from ${zip}`
+            : (() => {
+                const cur = data[cacheKey(active)];
+                if (cur === 'loading') return '⏳ Loading…';
+                if (cur && typeof cur === 'object' && 'count' in cur) {
+                  return `📡 ${cur.count} of ${cur.totalAvailable.toLocaleString()} ${scope === 'carmax' ? 'CarMax' : 'total'} found`;
+                }
+                if (cur && typeof cur === 'object' && 'error' in cur) {
+                  return <span className="text-danger">Error: {cur.error}</span>;
+                }
+                return '';
+              })()}
         </div>
         <button
           onClick={refreshActive}
-          disabled={loading}
-          className="rounded-md border border-border bg-surface px-2.5 py-1 text-xs font-semibold text-text-dim hover:border-accent hover:text-accent disabled:opacity-50"
+          className="rounded-md border border-border bg-surface px-2.5 py-1 text-xs font-semibold text-text-dim hover:border-accent hover:text-accent"
         >
           🔄 Refresh
         </button>
       </div>
 
-      {/* Listings */}
-      {loading ? (
-        <SkeletonGrid />
-      ) : current && typeof current === 'object' && 'listings' in current && current.listings.length > 0 ? (
-        <div className="grid gap-3 sm:grid-cols-2">
-          {current.listings.map(listing => (
-            <ListingCard
-              key={listing.id}
-              listing={listing}
-              alreadySaved={savedVins.has(listing.vin)}
-              onAdd={() => addToFinds(listing)}
-            />
-          ))}
+      {/* All Models view: grouped sections */}
+      {active === 'all' ? (
+        <div className="space-y-5">
+          {MODELS.map(m => {
+            const cell = data[cacheKey(m.model)];
+            return (
+              <ModelSection
+                key={m.model}
+                model={m}
+                cell={cell}
+                savedVins={savedVins}
+                onAdd={addToFinds}
+                onSeeMore={() => setActive(m.model)}
+              />
+            );
+          })}
         </div>
-      ) : !isError ? (
-        <div className="rounded-xl border border-dashed border-border bg-surface/50 p-6 text-center text-sm text-text-dim">
-          No listings found for this model in the selected area + price range.
-        </div>
-      ) : null}
+      ) : (
+        <SingleModelGrid
+          cell={data[cacheKey(active)]}
+          savedVins={savedVins}
+          onAdd={addToFinds}
+        />
+      )}
     </div>
   );
 }
 
-function ListingCard({ listing, alreadySaved, onAdd }: { listing: Listing; alreadySaved: boolean; onAdd: () => void }) {
+function ModelSection({
+  model, cell, savedVins, onAdd, onSeeMore
+}: {
+  model: typeof MODELS[number];
+  cell: CellState;
+  savedVins: Set<string>;
+  onAdd: (l: Listing) => void;
+  onSeeMore: () => void;
+}) {
+  const isLoading = cell === 'loading';
+  const hasError = cell && typeof cell === 'object' && 'error' in cell;
+  const hasData = cell && typeof cell === 'object' && 'listings' in cell;
+  const listings = hasData ? cell.listings : [];
+  const total = hasData ? cell.totalAvailable : 0;
+
+  return (
+    <section className="rounded-xl border border-border bg-surface/30 p-3 sm:p-4">
+      <header className="mb-3 flex items-baseline justify-between gap-2">
+        <h3 className="text-base font-bold sm:text-lg">{model.label}</h3>
+        <div className="flex items-center gap-2 text-xs text-text-faint">
+          {hasData && total > 0 && (
+            <span><span className="font-bold text-text">{total}</span> nearby</span>
+          )}
+          {hasData && total > listings.length && (
+            <button onClick={onSeeMore} className="font-semibold text-accent-2 hover:underline">
+              See all →
+            </button>
+          )}
+        </div>
+      </header>
+
+      {isLoading ? (
+        <div className="grid gap-2 sm:grid-cols-2">
+          {[0, 1].map(i => <SkeletonCard key={i} />)}
+        </div>
+      ) : hasError ? (
+        <div className="rounded-md border border-danger/30 bg-danger/5 p-3 text-xs text-danger">
+          {(cell as { error: string }).error}
+        </div>
+      ) : listings.length === 0 ? (
+        <div className="rounded-md border border-dashed border-border bg-bg/30 p-3 text-center text-xs text-text-faint">
+          No listings under filters
+        </div>
+      ) : (
+        <div className="grid gap-2 sm:grid-cols-2">
+          {listings.map(l => (
+            <ListingCard key={l.id} listing={l} compact alreadySaved={savedVins.has(l.vin)} onAdd={() => onAdd(l)} />
+          ))}
+        </div>
+      )}
+    </section>
+  );
+}
+
+function SingleModelGrid({
+  cell, savedVins, onAdd
+}: {
+  cell: CellState;
+  savedVins: Set<string>;
+  onAdd: (l: Listing) => void;
+}) {
+  if (cell === 'loading' || !cell) {
+    return (
+      <div className="grid gap-3 sm:grid-cols-2">
+        {[0, 1, 2, 3].map(i => <SkeletonCard key={i} />)}
+      </div>
+    );
+  }
+  if ('error' in cell) {
+    return null;
+  }
+  if (cell.listings.length === 0) {
+    return (
+      <div className="rounded-xl border border-dashed border-border bg-surface/50 p-6 text-center text-sm text-text-dim">
+        No listings found for this model in the selected area + price range.
+      </div>
+    );
+  }
+  return (
+    <div className="grid gap-3 sm:grid-cols-2">
+      {cell.listings.map(l => (
+        <ListingCard key={l.id} listing={l} alreadySaved={savedVins.has(l.vin)} onAdd={() => onAdd(l)} />
+      ))}
+    </div>
+  );
+}
+
+function ListingCard({
+  listing, alreadySaved, onAdd, compact = false
+}: {
+  listing: Listing;
+  alreadySaved: boolean;
+  onAdd: () => void;
+  compact?: boolean;
+}) {
   const priceDrop = listing.priceChangePct < -1;
   const priceUp = listing.priceChangePct > 1;
   return (
     <article className="overflow-hidden rounded-xl border border-border bg-surface transition-all hover:border-accent/40">
       {listing.imageUrl ? (
-        <a href={listing.listingUrl} target="_blank" rel="noopener noreferrer" className="block aspect-[16/10] overflow-hidden bg-surface-2">
+        <a href={listing.listingUrl} target="_blank" rel="noopener noreferrer" className={cn('block overflow-hidden bg-surface-2', compact ? 'aspect-[16/9]' : 'aspect-[16/10]')}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={listing.imageUrl}
@@ -272,64 +407,67 @@ function ListingCard({ listing, alreadySaved, onAdd }: { listing: Listing; alrea
           />
         </a>
       ) : (
-        <div className="flex aspect-[16/10] items-center justify-center bg-surface-2 text-3xl text-text-faint">🚙</div>
+        <div className={cn('flex items-center justify-center bg-surface-2 text-3xl text-text-faint', compact ? 'aspect-[16/9]' : 'aspect-[16/10]')}>🚙</div>
       )}
-      <div className="p-3">
+      <div className={cn(compact ? 'p-2.5' : 'p-3')}>
         <div className="flex items-baseline justify-between gap-2">
-          <h3 className="text-sm font-bold leading-tight">
+          <h3 className={cn('font-bold leading-tight', compact ? 'text-xs' : 'text-sm')}>
             {listing.year} {listing.make} {listing.model}
           </h3>
           <div className="text-right">
-            <div className="text-lg font-extrabold tabular-nums text-accent-2">{fmtCurrency(listing.price)}</div>
+            <div className={cn('font-extrabold tabular-nums text-accent-2', compact ? 'text-sm' : 'text-lg')}>
+              {fmtCurrency(listing.price)}
+            </div>
             {priceDrop && <div className="text-[10px] font-bold text-success">▼ {Math.abs(listing.priceChangePct).toFixed(1)}%</div>}
             {priceUp && <div className="text-[10px] font-bold text-danger">▲ {listing.priceChangePct.toFixed(1)}%</div>}
           </div>
         </div>
-        {listing.trim && <div className="text-xs text-text-faint">{listing.trim}</div>}
-        <div className="mt-2 flex flex-wrap gap-x-3 gap-y-0.5 text-[11px] text-text-faint">
+        {listing.trim && <div className="text-[11px] text-text-faint">{listing.trim}</div>}
+        <div className="mt-1.5 flex flex-wrap gap-x-2 gap-y-0.5 text-[10px] text-text-faint">
           {listing.mileage > 0 && <span>{listing.mileage.toLocaleString()} mi</span>}
           {listing.exteriorColor && <span>{listing.exteriorColor}</span>}
-          {listing.drivetrain && <span>{listing.drivetrain.toUpperCase()}</span>}
-          {listing.daysOnMarket > 0 && <span>{listing.daysOnMarket}d on market</span>}
+          {listing.daysOnMarket > 0 && <span>{listing.daysOnMarket}d</span>}
         </div>
-        <div className="mt-2 flex flex-wrap gap-1">
-          {listing.carfaxOneOwner && (
-            <span className="rounded-full bg-success/15 px-2 py-0.5 text-[10px] font-bold text-success">1-Owner</span>
-          )}
-          {listing.carfaxCleanTitle && (
-            <span className="rounded-full bg-success/15 px-2 py-0.5 text-[10px] font-bold text-success">Clean Title</span>
-          )}
-          {!listing.carfaxCleanTitle && (
-            <span className="rounded-full bg-warning/15 px-2 py-0.5 text-[10px] font-bold text-warning">Check Carfax</span>
-          )}
-        </div>
-        {(listing.dealerName || listing.dealerDistance) && (
-          <div className="mt-2 text-[11px] text-text-dim">
-            📍 {listing.dealerName || 'Dealer'}
-            {listing.dealerCity && <span> · {listing.dealerCity}, {listing.dealerState}</span>}
-            {listing.dealerDistance !== undefined && <span> · {listing.dealerDistance.toFixed(0)}mi away</span>}
+        {!compact && (
+          <div className="mt-2 flex flex-wrap gap-1">
+            {listing.carfaxOneOwner && (
+              <span className="rounded-full bg-success/15 px-2 py-0.5 text-[10px] font-bold text-success">1-Owner</span>
+            )}
+            {listing.carfaxCleanTitle && (
+              <span className="rounded-full bg-success/15 px-2 py-0.5 text-[10px] font-bold text-success">Clean Title</span>
+            )}
+            {!listing.carfaxCleanTitle && (
+              <span className="rounded-full bg-warning/15 px-2 py-0.5 text-[10px] font-bold text-warning">Check Carfax</span>
+            )}
           </div>
         )}
-        <div className="mt-3 flex gap-2">
+        {(listing.dealerName || listing.dealerDistance) && (
+          <div className={cn('text-text-dim', compact ? 'mt-1 text-[10px]' : 'mt-2 text-[11px]')}>
+            📍 {listing.dealerName || 'Dealer'}
+            {listing.dealerCity && <span> · {listing.dealerCity}</span>}
+            {listing.dealerDistance !== undefined && <span> · {listing.dealerDistance.toFixed(0)}mi</span>}
+          </div>
+        )}
+        <div className={cn('flex gap-1.5', compact ? 'mt-2' : 'mt-3 gap-2')}>
           <a
             href={listing.listingUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex-1 rounded-md border border-border bg-surface-2 px-3 py-1.5 text-center text-xs font-semibold text-text-dim hover:border-accent hover:text-accent"
+            className="flex-1 rounded-md border border-border bg-surface-2 px-2 py-1.5 text-center text-[11px] font-semibold text-text-dim hover:border-accent hover:text-accent"
           >
-            View listing ↗
+            View ↗
           </a>
           <button
             onClick={onAdd}
             disabled={alreadySaved}
             className={cn(
-              'rounded-md px-3 py-1.5 text-xs font-bold transition-colors',
+              'rounded-md px-2 py-1.5 text-[11px] font-bold transition-colors',
               alreadySaved
                 ? 'border border-success bg-success/10 text-success'
                 : 'bg-gradient text-white hover:opacity-90'
             )}
           >
-            {alreadySaved ? '✓ Added' : '+ Add to my finds'}
+            {alreadySaved ? '✓ Added' : '+ Save'}
           </button>
         </div>
       </div>
@@ -337,19 +475,14 @@ function ListingCard({ listing, alreadySaved, onAdd }: { listing: Listing; alrea
   );
 }
 
-function SkeletonGrid() {
+function SkeletonCard() {
   return (
-    <div className="grid gap-3 sm:grid-cols-2">
-      {[0, 1, 2, 3].map(i => (
-        <div key={i} className="overflow-hidden rounded-xl border border-border bg-surface">
-          <div className="aspect-[16/10] animate-pulse bg-surface-2" />
-          <div className="space-y-2 p-3">
-            <div className="h-4 w-2/3 animate-pulse rounded bg-surface-2" />
-            <div className="h-3 w-1/2 animate-pulse rounded bg-surface-2" />
-            <div className="h-3 w-1/3 animate-pulse rounded bg-surface-2" />
-          </div>
-        </div>
-      ))}
+    <div className="overflow-hidden rounded-xl border border-border bg-surface">
+      <div className="aspect-[16/10] animate-pulse bg-surface-2" />
+      <div className="space-y-2 p-3">
+        <div className="h-4 w-2/3 animate-pulse rounded bg-surface-2" />
+        <div className="h-3 w-1/2 animate-pulse rounded bg-surface-2" />
+      </div>
     </div>
   );
 }
