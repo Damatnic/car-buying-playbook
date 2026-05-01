@@ -143,6 +143,9 @@ export async function GET(req: NextRequest) {
   url.searchParams.set('sort_by', 'dom_active');
   url.searchParams.set('sort_order', 'asc');
   url.searchParams.set('inventory_type', 'used');
+  // Pass dealer_name to MarketCheck so they surface those listings in results.
+  // We still filter client-side as a secondary check.
+  if (dealerFilter) url.searchParams.set('dealer_name', dealerFilter);
 
   // Retry with exponential backoff if MarketCheck rate-limits us
   let res: Response | null = null;
