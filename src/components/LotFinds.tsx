@@ -141,9 +141,34 @@ export function LotFinds() {
             />
           </div>
         </div>
-        <p className="mt-2 text-[11px] text-text-faint">
-          Adjust to match your actual pre-approval. All saved cars below recalculate instantly.
-        </p>
+        <div className="mt-2.5 flex flex-wrap gap-1.5">
+          <span className="self-center text-[10px] font-bold uppercase tracking-wider text-text-faint">APR presets:</span>
+          {[
+            { value: 7, label: '7%', sub: 'excellent', color: 'success' },
+            { value: 11, label: '11%', sub: 'good pre-approval', color: 'success' },
+            { value: 14, label: '14%', sub: 'fair pre-approval', color: 'warning' },
+            { value: 17, label: '17%', sub: 'subprime default', color: 'warning' },
+            { value: 21, label: '21%', sub: 'dealer subprime', color: 'danger' }
+          ].map(p => (
+            <button
+              key={p.value}
+              onClick={() => setApr(p.value)}
+              className={cn(
+                'rounded-full border px-2 py-0.5 text-[10px] font-semibold transition-all',
+                apr === p.value
+                  ? p.color === 'success' ? 'border-success bg-success/15 text-success' :
+                    p.color === 'warning' ? 'border-warning bg-warning/15 text-warning' :
+                    'border-danger bg-danger/15 text-danger'
+                  : 'border-border bg-surface-2 text-text-faint hover:border-accent hover:text-text'
+              )}
+            >
+              {p.label} <span className="opacity-70">{p.sub}</span>
+            </button>
+          ))}
+        </div>
+        <div className="mt-2.5 rounded-md border border-accent/20 bg-accent/5 px-3 py-2 text-[11px] text-text-dim">
+          <strong className="text-accent-2">💡 Why monthly is high:</strong> 17% subprime APR adds ~$5,500 of interest over 72 months on a $25k loan. Get a Capital One Auto Navigator soft-pull pre-approval (no credit hit) — if you land 11-13% APR, monthly drops $50-80/mo on the same car.
+        </div>
       </div>
 
       {/* Add button or form */}
