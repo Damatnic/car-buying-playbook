@@ -48,11 +48,14 @@ const MODELS = [
   { make: 'mitsubishi', model: 'outlander', label: 'Mitsubishi Outlander' }
 ];
 
+type DealerScope = 'all' | 'carmax';
+
 export function LiveInventory() {
   const [active, setActive] = useState(MODELS[0].model);
   const [zip, setZip] = useState('53186');
   const [radius, setRadius] = useState(50);
   const [maxPrice, setMaxPrice] = useState(28000);
+  const [scope, setScope] = useState<DealerScope>('all');
   const [data, setData] = useState<Record<string, InventoryResponse | { error: string } | 'loading'>>({});
   const [savedVins, setSavedVins] = useState<Set<string>>(new Set());
 
@@ -68,10 +71,13 @@ export function LiveInventory() {
     return () => window.removeEventListener('cbp:storage', handler);
   }, [refreshSavedVins]);
 
+  const cacheKey = (model: string) => `${model}|${scope}|${zip}|${radius}|${maxPrice}`;
+
   const load = useCallback(async (model: string) => {
     const m = MODELS.find(x => x.model === model);
     if (!m) return;
-    setData(prev => ({ ...prev, [model]: 'loading' }));
+    const key = cacheKey(model);
+    setData(prev => ({ ...prev, [key]: 'loading' }));
     try {
       const params = new URLSearchParams({
         make: m.make,
@@ -82,18 +88,20 @@ export function LiveInventory() {
         minYear: '2022',
         rows: '15'
       });
+      if (scope === 'carmax') params.set('dealerFilter', 'carmax');
       const res = await fetch(`/api/inventory?${params}`);
       if (!res.ok) {
         const errBody = await res.text();
-        setData(prev => ({ ...prev, [model]: { error: `${res.status}: ${errBody.slice(0, 200)}` } }));
+        setData(prev => ({ ...prev, [key]: { error: `${res.status}: ${errBody.slice(0, 200)}` } }));
         return;
       }
       const json = (await res.json()) as InventoryResponse;
-      setData(prev => ({ ...prev, [model]: json }));
+      setData(prev => ({ ...prev, [key]: json }));
     } catch (e) {
-      setData(prev => ({ ...prev, [model]: { error: e instanceof Error ? e.message : 'fetch failed' } }));
+      setData(prev => ({ ...prev, [key]: { error: e instanceof Error ? e.message : 'fetch failed' } }));
     }
-  }, [zip, radius, maxPrice]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [zip, radius, maxPrice, scope]);
 
   useEffect(() => {
     void load(active);
@@ -121,12 +129,40 @@ export function LiveInventory() {
     refreshSavedVins();
   };
 
-  const current = data[active];
+  const current = data[cacheKey(active)];
   const loading = current === 'loading';
   const isError = current && typeof current === 'object' && 'error' in current;
 
   return (
     <div className="space-y-3">
+      {/* Dealer scope toggle */}
+      <div className="grid grid-cols-2 gap-2">
+        <button
+          onClick={() => setScope('all')}
+          className={cn(
+            'rounded-xl border px-4 py-3 text-sm font-bold transition-all',
+            scope === 'all'
+              ? 'border-accent bg-accent/15 text-accent'
+              : 'border-border bg-surface text-text-dim hover:border-accent/40'
+          )}
+        >
+          🏢 All Dealers Nearby
+          <div className="mt-0.5 text-[10px] font-normal text-text-faint">CarMax + franchise + independents</div>
+        </button>
+        <button
+          onClick={() => setScope('carmax')}
+          className={cn(
+            'rounded-xl border px-4 py-3 text-sm font-bold transition-all',
+            scope === 'carmax'
+              ? 'border-success bg-success/15 text-success'
+              : 'border-border bg-surface text-text-dim hover:border-success/40'
+          )}
+        >
+          🎯 CarMax Only
+          <div className="mt-0.5 text-[10px] font-normal text-text-faint">Just CarMax inventory</div>
+        </button>
+      </div>
+
       {/* Filter bar */}
       <div className="rounded-xl border border-border bg-surface p-3 sm:p-4">
         <div className="grid grid-cols-3 gap-3 text-sm">

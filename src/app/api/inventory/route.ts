@@ -112,7 +112,10 @@ export async function GET(req: NextRequest) {
   const radius = Math.min(200, Math.max(10, Number(clean(params, 'radius', '50'))));
   const maxPrice = Math.min(60000, Math.max(5000, Number(clean(params, 'maxPrice', '28000'))));
   const minYear = Math.min(2026, Math.max(2010, Number(clean(params, 'minYear', '2022'))));
-  const rows = Math.min(50, Math.max(1, Number(clean(params, 'rows', '12'))));
+  const dealerFilter = clean(params, 'dealerFilter', '');
+  const requestedRows = Math.min(50, Math.max(1, Number(clean(params, 'rows', '12'))));
+  // When filtering by dealer, fetch more rows to compensate for client-side filtering
+  const rows = dealerFilter ? Math.min(50, requestedRows * 4) : requestedRows;
 
   if (!ALLOWED_MAKES.has(make)) {
     return NextResponse.json({ error: 'make not in allowlist' }, { status: 400 });
@@ -154,14 +157,19 @@ export async function GET(req: NextRequest) {
     }
     const data = await res.json();
     const items: any[] = Array.isArray(data?.listings) ? data.listings : [];
-    const normalized = items.map(normalize).filter((x): x is NormalizedListing => x !== null);
+    let normalized = items.map(normalize).filter((x): x is NormalizedListing => x !== null);
+    if (dealerFilter) {
+      const needle = dealerFilter.toLowerCase();
+      normalized = normalized.filter(l => (l.dealerName ?? '').toLowerCase().includes(needle));
+    }
+    const sliced = normalized.slice(0, requestedRows);
     const response: InventoryResponse = {
       source: 'marketcheck',
-      count: normalized.length,
-      totalAvailable: Number(data?.num_found ?? normalized.length),
+      count: sliced.length,
+      totalAvailable: dealerFilter ? normalized.length : Number(data?.num_found ?? normalized.length),
       fetchedAt: Date.now(),
       query: { make, model, zip, radius, maxPrice, minYear },
-      listings: normalized
+      listings: sliced
     };
     return NextResponse.json(response, {
       headers: { 'Cache-Control': 's-maxage=600, stale-while-revalidate=1200' }
